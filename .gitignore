@@ -1,0 +1,10 @@
+# User-specific files
+*.bak
+*.swp
+*.o
+cmake_build
+.vscode
+output/bin
+output/lib
+
+!.gitkeep

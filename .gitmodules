@@ -1,0 +1,3 @@
+[submodule "source/submodules/iCVBaseUtilsLib"]
+	path = source/submodules/iCVBaseUtilsLib
+	url = https://github.com/wocantudou/iCVBaseUtilsLib.git
