@@ -1,3 +1,5 @@
+set(source_dir ${PROJECT_SOURCE_DIR}/source)
+
 # opencv 3.4.4
 include_directories(
     ${source_dir}/submodules/Opencv3.4.4/include
