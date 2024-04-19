@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.6)
 if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
-set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE} CACHE STRINGS "" FORCE)
+set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE} CACHE STRING "" FORCE)
 
 project(iCVFrameWork C CXX)
 
@@ -44,6 +44,10 @@ if(ENGINE_DATA_DUMP)
     add_definitions(-DENGINE_DATA_DUMP)
     message(STATUS "add_definitions(-DENGINE_DATA_DUMP)")
 endif()
+
+include(${PROJECT_SOURCE_DIR}/cmake/platform.cmake)
+
+add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
 
 if(BUILD_WITH_EASY_PROFILER)
     add_definitions(-DBUILD_WITH_EASY_PROFILER)

@@ -1,0 +1,15 @@
+LIBRARY "iCVFrameWorkRT"
+EXPORTS
+    iCVFrameWorkInitialize @1
+    iCVFrameWorkUninitialize @2
+    iCVFrameWorkCreateInst @3
+    iCVFrameWorkDestroyInst @4
+    iCVFrameWorkResetInst @5
+    iCVFrameWorkSetParameter @6
+    iCVFrameWorkGetParameter @7
+    iCVFrameWorkGetResult @8
+    iCVFrameWorkResourceAdd @9
+    iCVFrameWorkResourceAddFromMem @10
+    iCVFrameWorkResourceDelete @11
+    iCVFrameWorkGetResVersion @12
+    iCVFrameWorkGetEngineVersion @13

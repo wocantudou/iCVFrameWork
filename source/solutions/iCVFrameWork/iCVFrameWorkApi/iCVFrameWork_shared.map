@@ -1,0 +1,17 @@
+{
+global:
+    iCVFrameWorkInitialize;
+    iCVFrameWorkUninitialize;
+    iCVFrameWorkCreateInst;
+    iCVFrameWorkDestroyInst;
+    iCVFrameWorkResetInst;
+    iCVFrameWorkSetParameter;
+    iCVFrameWorkGetParameter;
+    iCVFrameWorkGetResult;
+    iCVFrameWorkResourceAdd;
+    iCVFrameWorkResourceAddFromMem;
+    iCVFrameWorkResourceDelete;
+    iCVFrameWorkGetResVersion;
+    iCVFrameWorkGetEngineVersion;
+local: *;
+};

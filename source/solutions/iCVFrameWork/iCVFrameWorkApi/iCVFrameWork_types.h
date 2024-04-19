@@ -1,2 +1,2 @@
 #pragma once
-#include "iCVBase_typs.h"
+#include "iCVBase_types.h"

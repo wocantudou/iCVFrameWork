@@ -33,7 +33,7 @@ cd ${build_dir}
 
 rm -rf *
 cmake	-DBUILD_BASE_UTILS_LIB_TEST=ON						\
-		-DBUILD_WITH_EASY_PROFILER=ON							\
+		-DBUILD_WITH_EASY_PROFILER=ON						\
 		-DANDROID_ABI=${android_abi}                        \
 		-DCMAKE_TOOLCHAIN_FILE=${toolchain}                 \
 		-DANDROID_PLATFORM=${android_platform}              \

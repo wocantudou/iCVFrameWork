@@ -1,7 +1,28 @@
 #pragma once
 
+#if defined(_MSC_VER) /* Microsoft Visual C++ */
+#if defined(ICVBASEAPI)
+#undef ICVBASEAPI
+#undef ICVBASEAPITYPE
+#endif
+#define ICVBASEAPI __stdcall
+#define ICVBASEAPITYPE __stdcall
+#pragma pack(push, 8)
+#else /* Any other including Unix */
+#if defined(ICVBASEAPI)
+#undef ICVBASEAPI
+#undef ICVBASEAPITYPE
+#endif
+#define ICVBASEAPI __attribute__((visibility("default")))
+#define ICVBASEAPITYPE
+#endif
+
 typedef int int32_t;
-typedef void ICV_BASE_INST;
+typedef void *ICV_BASE_INST;
+
+#define ENGINE_API(RetType, FunName, ParamList)                                \
+    RetType ICVBASEAPI FunName ParamList;                                      \
+    typedef RetType(ICVBASEAPITYPE *Proc_##FunName) ParamList;
 
 enum RESTYPE {
     RESTYPE_NONE,
@@ -10,6 +31,11 @@ enum RESTYPE {
     RESTYPE_FACE_ALIGNMENT_CPU = 200,
     RESTYPE_FACE_ALIGNMENT_NPU = 201,
     RESTYPE_COUNT,
+};
+
+struct RES_SET {
+    RESTYPE res_type;
+    void *reserved; // reserved parameters
 };
 
 enum ICV_BASE_IMG_FMT {
