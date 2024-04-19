@@ -107,7 +107,7 @@ function(ModuleDependLibs thirdparty_libs)
     endif()
     
     if(BUILD_WITH_EASY_PROFILER)
-        # list(APPEND thirdparty_lib "easy_profiler")
+        list(APPEND thirdparty_lib "easy_profiler")
     endif()
 
     if(MSVC)
