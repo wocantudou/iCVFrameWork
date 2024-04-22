@@ -1,7 +1,7 @@
+#include "iCVBase_inst_mgr.hpp"
 #include "iCVFrameWork_api.h"
 #include "iCVFrameWork_cfg.h"
 #include "iCVFrameWork_config.h"
-#include "onnxrt_wrapper.h" //onnx runtime
 
 int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
                                           void *reserved) {
