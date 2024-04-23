@@ -56,6 +56,9 @@ include(${PROJECT_SOURCE_DIR}/cmake/platform.cmake)
 
 add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
 
+# DnnWrapper
+add_subdirectory(${source_dir}/submodules/DnnWrapper)
+
 if(BUILD_WITH_EASY_PROFILER)
     add_definitions(-DBUILD_WITH_EASY_PROFILER)
     message(STATUS "add_definitions(-DBUILD_WITH_EASY_PROFILER)")

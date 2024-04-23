@@ -1,8 +1,7 @@
 #pragma once
 #include "dp_factory.hpp"
 #include "dp_singleton.hpp"
-#include "iCVBase_errcode.h"
-#include "iCVBase_types.h"
+
 #include "onnxrt_wrapper.h" //onnx runtime
 #include <string>
 #include <unordered_map>

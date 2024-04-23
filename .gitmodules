@@ -1,3 +1,6 @@
 [submodule "source/submodules/iCVBaseUtilsLib"]
 	path = source/submodules/iCVBaseUtilsLib
 	url = https://github.com/wocantudou/iCVBaseUtilsLib.git
+[submodule "source/submodules/DnnWrapper"]
+	path = source/submodules/DnnWrapper
+	url = https://github.com/wocantudou/DnnWrapper.git
