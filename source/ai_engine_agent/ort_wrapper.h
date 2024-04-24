@@ -77,6 +77,14 @@ class OnnxRTWrapper
         return ret;
     }
 
+    int32_t get_output_shape(const RESTYPE rest_type,
+                             std::vector<Dims> &output_dims) {
+        int32_t ret = ICVBASE_NO_ERROR;
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        return ret;
+    }
+
     int32_t inference(const RESTYPE res_type, const void *input,
                       const Dims &input_dims, std::vector<float> &output,
                       Dims &output_dims, int32_t batch_num = 1) {
