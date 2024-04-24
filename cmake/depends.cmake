@@ -1,25 +1,16 @@
 set(source_dir ${PROJECT_SOURCE_DIR}/source)
 
-# opencv 3.4.4
+# opencv 4.9.0
 include_directories(
-    ${source_dir}/submodules/Opencv3.4.4/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/core/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/dnn/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/features2d/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/flann/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/highgui/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/imgproc/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/imgcodecs/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/videoio/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/calib3d/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/ml/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/objdetect/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/photo/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/shape/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/videostab/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/video/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/stitching/include
-    ${source_dir}/submodules/Opencv3.4.4/modules/superres/include
+    ${source_dir}/submodules/Opencv4.9.0/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/core/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/features2d/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/flann/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/highgui/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/imgproc/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/imgcodecs/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/videoio/include
+    ${source_dir}/submodules/Opencv4.9.0/modules/calib3d/include
     )
 
 if(BUILD_OPENCV)
@@ -28,7 +19,7 @@ if(BUILD_OPENCV)
                 )
 else()
     include_directories(
-                ${source_dir}/common/3rdparty
+                ${source_dir}/include
                 )
 endif()
 
@@ -80,30 +71,30 @@ function(ModuleDependLibs thirdparty_libs)
 
     if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         if(BUILD_OPENCV)
-            # if (MSVC)
-			# 	list(APPEND thirdparty_lib "opencv_imgcodecs344;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
-            #     list(APPEND thirdparty_lib "opencv_calib3d344;opencv_imgproc344;opencv_core344;opencv_highgui344;ittnotify;zlib")
-            # else()
-			# 	list(APPEND thirdparty_lib "opencv_imgcodecs")
-            #     list(APPEND thirdparty_lib "opencv_calib3d;opencv_imgproc;opencv_core;opencv_highgui")
-            # endif()
+            if (MSVC)
+				list(APPEND thirdparty_lib "opencv_imgcodecs409;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
+                list(APPEND thirdparty_lib "opencv_calib3d409;opencv_imgproc409;opencv_core409;ittnotify;zlib")
+            else()
+				list(APPEND thirdparty_lib "opencv_imgcodecs")
+                list(APPEND thirdparty_lib "opencv_calib3d;opencv_imgproc;opencv_core")
+            endif()
         else()
-            # if (MSVC)
-			# 	list(APPEND thirdparty_lib "opencv_imgcodecs344d;libpngd;libtiffd;libjpeg-turbod;libjasperd;IlmImfd;libwebpd")
-            #     list(APPEND thirdparty_lib "opencv_calib3d344d;opencv_imgproc344d;opencv_core344d;opencv_highgui344d;ittnotifyd;zlibd")
-            # else()
-			# 	list(APPEND thirdparty_lib "opencv_imgcodecsd")
-            #     list(APPEND thirdparty_lib "opencv_calib3dd;opencv_imgprocd;opencv_cored;opencv_highguid")
-            # endif()
+            if (MSVC)
+				list(APPEND thirdparty_lib "opencv_imgcodecs409d;libpngd;libtiffd;libjpeg-turbod;libjasperd;IlmImfd;libwebpd")
+                list(APPEND thirdparty_lib "opencv_calib3d409d;opencv_imgproc409d;opencv_core409d;ittnotifyd;zlibd")
+            else()
+				list(APPEND thirdparty_lib "opencv_imgcodecsd")
+                list(APPEND thirdparty_lib "opencv_calib3dd;opencv_imgprocd;opencv_cored")
+            endif()
         endif()
     else()
-        # if (MSVC)
-		#     list(APPEND thirdparty_lib "opencv_imgcodecs344;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
-        #     list(APPEND thirdparty_lib "opencv_calib3d344;opencv_imgproc344;opencv_core344;opencv_highgui344;ittnotify;zlib")
-        # else()
-		# 	list(APPEND thirdparty_lib "opencv_imgcodecs")
-        #     list(APPEND thirdparty_lib "opencv_calib3d;opencv_imgproc;opencv_core;opencv_highgui")
-        # endif()
+        if (MSVC)
+		    list(APPEND thirdparty_lib "opencv_imgcodecs409;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
+            list(APPEND thirdparty_lib "opencv_calib3d409;opencv_imgproc409;opencv_core409;ittnotify;zlib")
+        else()
+			list(APPEND thirdparty_lib "opencv_imgcodecs")
+            list(APPEND thirdparty_lib "opencv_calib3d;opencv_imgproc;opencv_core")
+        endif()
     endif()
     
     list(APPEND thirdparty_lib "ipedu_static")

@@ -1,4 +1,4 @@
-#include "onnxrt_wrapper.h"
+#include "ort_wrapper.h"
 namespace DNN_WRAPPER {
 const std::unordered_map<RESTYPE, const std::string>
     OnnxRTWrapper::restype_name_map_ = {
