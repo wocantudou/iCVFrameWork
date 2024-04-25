@@ -1,4 +1,9 @@
 #pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     ICVBASE_GENERAL_ERROR = -1,
     ICVBASE_NO_ERROR = 0,
@@ -19,3 +24,7 @@ enum {
     ICVBASE_IO_ERROR,
     ICVBASE_UNKNOWN_ERROR
 };
+
+#ifdef __cplusplus
+};
+#endif

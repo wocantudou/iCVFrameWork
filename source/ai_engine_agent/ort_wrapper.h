@@ -39,6 +39,10 @@ class OnnxRTWrapper
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        // for (int32_t idx = static_cast<int32_t>(RESTYPE::RESTYPE_NONE);
+        //      idx < static_cast<int32_t>(RESTYPE::RESTYPE_COUNT); ++idx) {
+
+        // }
         return ret;
     }
     int32_t fini() {

@@ -20,10 +20,24 @@
 typedef int int32_t;
 typedef void *ICV_BASE_INST;
 
+#define ENUM_TO_STRING(value) #value
+
 #define ENGINE_API(RetType, FunName, ParamList)                                \
     RetType ICVBASEAPI FunName ParamList;                                      \
     typedef RetType(ICVBASEAPITYPE *Proc_##FunName) ParamList;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef BOOL
+#define BOOL int
+#define TRUE 1
+#define FALSE 0
+#endif
+
+// Enumerations In order for the conversion string to be traversed, the
+// definition of the enumeration must be contiguous.
 enum RESTYPE {
     RESTYPE_NONE,
     RESTYPE_FACE_DETECT_CPU,
@@ -92,7 +106,7 @@ typedef struct _ICVBaseDataIn {
 } ICVBaseDataIn;
 
 typedef struct _ICVBaseNumericFloat {
-    bool valid;
+    BOOL valid;
     float val;
 } ICVBaseNumericFloat;
 
@@ -136,3 +150,7 @@ typedef struct _ICVBaseAngle3d {
     float yaw;
     float roll;
 } ICVBaseAngle3d;
+
+#ifdef __cplusplus
+};
+#endif

@@ -6,4 +6,7 @@ const std::unordered_map<RESTYPE, const std::string>
         {RESTYPE_FACE_DETECT_NPU, "RESTYPE_FACE_DETECT_NPU"},
         {RESTYPE_FACE_ALIGNMENT_CPU, "RESTYPE_FACE_ALIGNMENT_CPU"},
         {RESTYPE_FACE_ALIGNMENT_NPU, "RESTYPE_FACE_ALIGNMENT_NPU"}};
-}
+
+// const std::unordered_map<RESTYPE, const std::string>
+//     OnnxRTWrapper::restype_name_map_ = {{RESTYPE_NONE, "RESTYPE_NONE"}};
+} // namespace DNN_WRAPPER
