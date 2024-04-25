@@ -34,9 +34,6 @@ class iCVBaseInstMgr {
         srlog_error_return(!ret, ("register_res_info error!"), ret);
         ret = register_res_creator();
         srlog_error_return(!ret, ("register_res_creator error!"), ret);
-        ret = module_bind_by_res();
-        srlog_error_return(!ret, ("module_bind_by_res error!"), ret);
-
         ret = DnnWrapperInst()->init();
         srlog_error_return(!ret, ("DnnWrapperInst()->init() error!"), ret);
         inited_ = true;
@@ -56,11 +53,12 @@ class iCVBaseInstMgr {
     int32_t setup(const RESTYPE res_type, const char *res_path) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_error_return((0 != res_info_umap_.count(res_type) ||
-                            0 != module_info_map_.count(res_type)),
-                           ("setup error, ResType : {} not registered!",
-                            static_cast<int32_t>(res_type)),
-                           ICVBASE_REGISTER_ERROR);
+        srlog_error_return(
+            (0 != res_info_umap_.count(res_type) ||
+             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+            ("setup error, ResType : {} not registered!",
+             static_cast<int32_t>(res_type)),
+            ICVBASE_REGISTER_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         iCVBaseResInfo res_info = res_info_umap_.at(res_type);
         std::string real_res_path;
@@ -69,7 +67,7 @@ class iCVBaseInstMgr {
         } else {
             real_res_path = res_path;
         }
-        if (0 == module_info_map_.count(res_type)) {
+        if (0 == DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->add_resource(res_type, real_res_path);
             srlog_error_return(
                 !ret,
@@ -83,13 +81,14 @@ class iCVBaseInstMgr {
     int32_t setup(const RESTYPE res_type, const void *data, const int32_t len) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_error_return((0 != res_info_umap_.count(res_type) ||
-                            0 != module_info_map_.count(res_type)),
-                           ("setup error, ResType : {} not registered!",
-                            static_cast<int32_t>(res_type)),
-                           ICVBASE_REGISTER_ERROR);
+        srlog_error_return(
+            (0 != res_info_umap_.count(res_type) ||
+             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+            ("setup error, ResType : {} not registered!",
+             static_cast<int32_t>(res_type)),
+            ICVBASE_REGISTER_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
-        if (0 == module_info_map_.count(res_type)) {
+        if (0 == DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->add_resource(res_type, data, len);
             srlog_error_return(
                 !ret,
@@ -103,13 +102,14 @@ class iCVBaseInstMgr {
     int32_t shutdown(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_error_return((0 != res_info_umap_.count(res_type) ||
-                            0 != module_info_map_.count(res_type)),
-                           ("shutdown error, ResType : {} not registered!",
-                            static_cast<int32_t>(res_type)),
-                           ICVBASE_REGISTER_ERROR);
+        srlog_error_return(
+            (0 != res_info_umap_.count(res_type) ||
+             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+            ("shutdown error, ResType : {} not registered!",
+             static_cast<int32_t>(res_type)),
+            ICVBASE_REGISTER_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
-        if (0 == module_info_map_.count(res_type)) {
+        if (0 == DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->del_resource(res_type);
             srlog_error_return(!ret,
                                ("DnnWrapperInst()->del_resource( {} ) error!",
@@ -122,11 +122,12 @@ class iCVBaseInstMgr {
     int32_t create_inst(const RESTYPE res_type, long &inst_id) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_error_return((0 != res_info_umap_.count(res_type) ||
-                            0 != module_info_map_.count(res_type)),
-                           ("create_inst error, ResType : {} not registered!",
-                            static_cast<int32_t>(res_type)),
-                           ICVBASE_REGISTER_ERROR);
+        srlog_error_return(
+            (0 != res_info_umap_.count(res_type) ||
+             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+            ("create_inst error, ResType : {} not registered!",
+             static_cast<int32_t>(res_type)),
+            ICVBASE_REGISTER_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         {
             std::lock_guard<std::mutex> lock(mtx_);
@@ -140,8 +141,9 @@ class iCVBaseInstMgr {
         ret = inst->init(cfg_path_.c_str());
         srlog_error_return(!ret, ("inst->init( {} ) failed.", cfg_path_), ret);
 
-        if (0 != module_info_map_.count(res_type)) {
-            for (const auto &each_res : module_info_map_.at(res_type)) {
+        if (0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+            for (const auto &each_res :
+                 DnnWrapperInst()->nodtype_restypes_map_.at(res_type)) {
                 ret = DnnWrapperInst()->create_inst(each_res);
                 srlog_error_return(
                     !ret,
@@ -168,8 +170,9 @@ class iCVBaseInstMgr {
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         const RESTYPE res_type = inst->res_type_;
-        if (0 != module_info_map_.count(res_type)) {
-            for (const auto &each_res : module_info_map_.at(res_type)) {
+        if (0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+            for (const auto &each_res :
+                 DnnWrapperInst()->nodtype_restypes_map_.at(res_type)) {
                 ret = DnnWrapperInst()->destroy_inst(each_res);
                 srlog_error_return(
                     !ret,
@@ -250,18 +253,11 @@ class iCVBaseInstMgr {
   protected:
     virtual int32_t register_res_info() = 0;
     virtual int32_t register_res_creator() = 0;
-    virtual int32_t module_bind_by_res() {
-        int32_t ret = ICVBASE_NO_ERROR;
-        module_info_map_.clear();
-        // module_info_map_ = std::map<RESTYPE, std::vector<RESTYPE>>{};
-        return ret;
-    }
 
   private:
     void reset() {
         inst_umap_.clear();
         res_info_umap_.clear();
-        module_info_map_.clear();
         inst_id_ = INST_ID_INITIAL;
         cfg_path_ = "";
     }
@@ -274,5 +270,4 @@ class iCVBaseInstMgr {
     std::mutex mtx_;
     std::unordered_map<long, std::unique_ptr<iCVBaseDef>> inst_umap_;
     std::unordered_map<RESTYPE, iCVBaseResInfo> res_info_umap_;
-    std::unordered_map<RESTYPE, std::vector<RESTYPE>> module_info_map_;
 };

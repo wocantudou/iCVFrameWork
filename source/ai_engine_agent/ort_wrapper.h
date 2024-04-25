@@ -28,33 +28,30 @@ typedef struct _DNNExecute {
 } DNNExecute;
 typedef DNNExecute *DNNExecuteHandle;
 
-class OnnxRTWrapper
+class ORTWrapper
     : public DNNWrapper<RESTYPE, DNNModelHandle, DNNExecuteHandle> {
   public:
-    explicit OnnxRTWrapper() : inited_(false) {}
-    ~OnnxRTWrapper() { inited_ = false; }
+    explicit ORTWrapper() : inited_(false) {}
+    ~ORTWrapper() { inited_ = false; }
 
   public:
     int32_t init(const char *workdir = NULL) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
-        // for (int32_t idx = static_cast<int32_t>(RESTYPE::RESTYPE_NONE);
-        //      idx < static_cast<int32_t>(RESTYPE::RESTYPE_COUNT); ++idx) {
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
 
-        // }
         return ret;
     }
     int32_t fini() {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
     int32_t add_resource(const RESTYPE &res_type, const std::string &res_path) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
@@ -62,14 +59,14 @@ class OnnxRTWrapper
                          const int32_t len) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
     int32_t del_resource(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
@@ -77,7 +74,7 @@ class OnnxRTWrapper
                             std::vector<Dims> &input_dims) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
@@ -85,7 +82,7 @@ class OnnxRTWrapper
                              std::vector<Dims> &output_dims) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
@@ -94,7 +91,7 @@ class OnnxRTWrapper
                       Dims &output_dims, int32_t batch_num = 1) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
@@ -105,21 +102,21 @@ class OnnxRTWrapper
                       std::vector<Dims> output_dims, int32_t batch_num = 1) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
     int32_t create_inst(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
     int32_t destroy_inst(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "OnnxRTWrapper");
+        srlog_perf(LOG_PROF_TAG, "ORTWrapper");
         return ret;
     }
 
@@ -129,9 +126,11 @@ class OnnxRTWrapper
   public:
     static const std::unordered_map<RESTYPE, const std::string>
         restype_name_map_;
+    static const std::unordered_map<RESTYPE, std::vector<RESTYPE>>
+        nodtype_restypes_map_;
 };
 
 } // namespace DNN_WRAPPER
 
-#define DnnWrapperClass DNN_WRAPPER::OnnxRTWrapper
+#define DnnWrapperClass DNN_WRAPPER::ORTWrapper
 #define DnnWrapperInst SingletonClass<DnnWrapperClass>::get_inst
