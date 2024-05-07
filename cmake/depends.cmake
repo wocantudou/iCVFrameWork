@@ -53,6 +53,7 @@ include_directories(
                 ${source_dir}/submodules/DnnWrapper/source/include
                 ${source_dir}/submodules/DnnWrapper/source/submodules/IPEDU/source/include
                 ${source_dir}/ai_engine_agent
+                ${source_dir}/submodules/MNN-2.8.1/include
                 )
 
 include_directories(

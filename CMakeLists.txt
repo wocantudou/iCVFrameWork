@@ -81,7 +81,6 @@ endif()
 if(USE_AI_ENGINE_MNN)
     add_definitions(-DUSE_AI_ENGINE_MNN)
     message(STATUS "add_definitions(-DUSE_AI_ENGINE_MNN)")
-    include_directories(${source_dir}/submodules/MNN-2.8.1/include)
     add_subdirectory(${source_dir}/submodules/MNN-2.8.1)
 endif()
 # *********************** FOR DEPENDS End ***********************
