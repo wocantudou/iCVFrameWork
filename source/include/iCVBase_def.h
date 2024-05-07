@@ -1,7 +1,11 @@
 #pragma once
 #include "opencv2/opencv.hpp"
-#include "ort_wrapper.h" //onnx runtime
-
+#ifdef USE_AI_ENGINE_MNN
+#include "mnn/mnn_wrapper.h" //mnn
+#endif
+#ifdef USE_AI_ENGINE_ORT
+#include "ort/ort_wrapper.h" //onnx runtime
+#endif
 class iCVBaseEngine {
   public:
     virtual ~iCVBaseEngine() {}

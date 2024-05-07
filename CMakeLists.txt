@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.5)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
@@ -24,6 +24,7 @@ option(BUILD_WITH_EASY_PROFILER "Build with easy profiler for engine." OFF)
 option(BUILD_WITH_OPENCV "Build with OpenCV." ON)
 option(USE_FFMPEG "Build OpenCV with FFMpeg." OFF)
 option(ENGINE_DATA_DUMP "Dump engine input/output data for engine." OFF)
+option(USE_AI_ENGINE_MNN "Use mnn for AI engine." ON)
 
 find_package(Git QUIET)
 if(GIT_FOUND AND NOT EXISTS "${source_dir}/submodules/iCVBaseUtilsLib/.git")
@@ -54,10 +55,10 @@ if(ENGINE_DATA_DUMP)
     message(STATUS "add_definitions(-DENGINE_DATA_DUMP)")
 endif()
 
+
+
 include(${PROJECT_SOURCE_DIR}/cmake/platform.cmake)
-
-add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
-
+# *********************** FOR DEPENDS Begin ***********************
 # DnnWrapper
 add_subdirectory(${source_dir}/submodules/DnnWrapper)
 
@@ -67,6 +68,7 @@ if(BUILD_WITH_EASY_PROFILER)
     add_subdirectory(${source_dir}/submodules/iCVBaseUtilsLib)
 endif()
 
+# OpenCV
 if(BUILD_WITH_OPENCV)
     set(BUILD_LIST "calib3d" CACHE STRING "" FORCE)
     list(APPEND BUILD_LIST "videoio")
@@ -74,3 +76,13 @@ if(BUILD_WITH_OPENCV)
     set(WITH_FFMPEG ${USE_FFMPEG} CACHE BOOL "" FORCE)
     add_subdirectory(${source_dir}/submodules/Opencv4.9.0)
 endif()
+
+# AI Engine
+if(USE_AI_ENGINE_MNN)
+    add_definitions(-DUSE_AI_ENGINE_MNN)
+    message(STATUS "add_definitions(-DUSE_AI_ENGINE_MNN)")
+    add_subdirectory(${source_dir}/submodules/MNN-2.8.1)
+endif()
+# *********************** FOR DEPENDS End ***********************
+
+add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)

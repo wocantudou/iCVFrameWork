@@ -24,7 +24,7 @@ cmake	-DBUILD_BASE_UTILS_LIB_TEST=ON														\
 		-DCMAKE_TOOLCHAIN_FILE=${project_root_path}/cmake/x86_64_linux.toolchain.cmake		\
 		-DCMAKE_BUILD_TYPE=${build_type}													\
 		${project_root_path}
-make -j4
+make -j2
 
 if [ "${build_type}" == "Debug" ];then
 	exit

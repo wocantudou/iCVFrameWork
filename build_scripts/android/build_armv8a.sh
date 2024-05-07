@@ -42,7 +42,7 @@ cmake	-DBUILD_BASE_UTILS_LIB_TEST=ON						\
 		-DANDROID_STL=${android_stl}                        \
 		-DANDROID_TOOLCHAIN=${androidchain}					\
 		${project_root_path}
-make -j4
+make -j2
 
 if [ "${build_type}" == "Debug" ];then
 	exit
