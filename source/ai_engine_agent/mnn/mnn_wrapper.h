@@ -127,7 +127,7 @@ class MNNWrapper
     static const std::unordered_map<RESTYPE, const std::string>
         restype_name_map_;
     static const std::unordered_map<RESTYPE, std::vector<RESTYPE>>
-        nodtype_restypes_map_;
+        modtype_restypes_map_;
 };
 
 } // namespace DNN_WRAPPER

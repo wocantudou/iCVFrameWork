@@ -55,7 +55,7 @@ class iCVBaseInstMgr {
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
-             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+             0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("setup error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
@@ -67,7 +67,7 @@ class iCVBaseInstMgr {
         } else {
             real_res_path = res_path;
         }
-        if (0 == DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+        if (0 == DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->add_resource(res_type, real_res_path);
             srlog_error_return(
                 !ret,
@@ -83,12 +83,12 @@ class iCVBaseInstMgr {
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
-             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+             0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("setup error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
-        if (0 == DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+        if (0 == DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->add_resource(res_type, data, len);
             srlog_error_return(
                 !ret,
@@ -104,12 +104,12 @@ class iCVBaseInstMgr {
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
-             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+             0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("shutdown error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
-        if (0 == DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+        if (0 == DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->del_resource(res_type);
             srlog_error_return(!ret,
                                ("DnnWrapperInst()->del_resource( {} ) error!",
@@ -124,7 +124,7 @@ class iCVBaseInstMgr {
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
-             0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)),
+             0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("create_inst error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
@@ -141,9 +141,9 @@ class iCVBaseInstMgr {
         ret = inst->init(cfg_path_.c_str());
         srlog_error_return(!ret, ("inst->init( {} ) failed.", cfg_path_), ret);
 
-        if (0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+        if (0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             for (const auto &each_res :
-                 DnnWrapperInst()->nodtype_restypes_map_.at(res_type)) {
+                 DnnWrapperInst()->modtype_restypes_map_.at(res_type)) {
                 ret = DnnWrapperInst()->create_inst(each_res);
                 srlog_error_return(
                     !ret,
@@ -170,9 +170,9 @@ class iCVBaseInstMgr {
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         const RESTYPE res_type = inst->res_type_;
-        if (0 != DnnWrapperInst()->nodtype_restypes_map_.count(res_type)) {
+        if (0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             for (const auto &each_res :
-                 DnnWrapperInst()->nodtype_restypes_map_.at(res_type)) {
+                 DnnWrapperInst()->modtype_restypes_map_.at(res_type)) {
                 ret = DnnWrapperInst()->destroy_inst(each_res);
                 srlog_error_return(
                     !ret,
