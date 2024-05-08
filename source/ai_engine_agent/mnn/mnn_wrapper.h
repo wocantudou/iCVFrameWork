@@ -177,10 +177,73 @@ class MNNWrapper
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         std::shared_ptr<DnnInst> inst;
         ret = pop_instpool_map_inst_by_rt(res_type, inst);
+        srlog_error_return(!ret,
+                           ("pop_instpool_map_inst_by_rt( {} ) error!",
+                            static_cast<int>(res_type)),
+                           ret);
+        // TODO
+        ret = push_instpool_map_inst_by_rt(res_type, inst);
+        srlog_error_return(!ret,
+                           ("push_instpool_map_inst_by_rt( {} ) error!",
+                            static_cast<int>(res_type)),
+                           ret);
+        return ret;
+    }
+
+    int32_t inference(const RESTYPE res_type,
+                      const std::map<std::string, DnnDataInfo> &inputs,
+                      std::map<std::string, DnnDataInfo> &outputs,
+                      int32_t batch_num) {
+        int32_t ret = ICVBASE_NO_ERROR;
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
+        std::shared_ptr<DnnInst> inst;
+        ret = pop_instpool_map_inst_by_rt(res_type, inst);
+        srlog_error_return(!ret,
+                           ("pop_instpool_map_inst_by_rt( {} ) error!",
+                            static_cast<int>(res_type)),
+                           ret);
+        // set input
         auto input_tensors = model_handle->net_->getSessionInputAll(
             inst->execute_handle_->session_);
+        for (auto &input : inputs) {
+            auto nchw_input = std::make_shared<MNN::Tensor>(
+                input_tensors.at(input.first), MNN::Tensor::CAFFE);
+            auto nchw_input_host = nchw_input->host<float>();
+            memcpy(nchw_input_host, input.second.data_.data(),
+                   input.second.data_.size() * sizeof(float));
+            bool flag = input_tensors.at(input.first)
+                            ->copyFromHostTensor(nchw_input.get());
+            srlog_error_return(flag,
+                               ("copyFromHostTensor( {} ) error!", input.first),
+                               ICVBASE_MEMORY_ALLOCATION_ERROR);
+        }
+
+        // run
+        ret = model_handle->net_->runSession(inst->execute_handle_->session_);
+        srlog_error_return(
+            !ret, ("runSession( {} ) error!", static_cast<int>(res_type)),
+            ICVBASE_ALGORITHM_EXECUTION_ERROR);
+
+        // get output
+        auto output_tensors = model_handle->net_->getSessionOutputAll(
+            inst->execute_handle_->session_);
+        for (auto &output : output_tensors) {
+            auto nchw_output = std::make_shared<MNN::Tensor>(
+                output.second, MNN::Tensor::CAFFE);
+            output.second->copyToHostTensor(nchw_output.get());
+            // auto values = nchw_output->host<float>();
+            std::vector<float> tmp_output;
+            memcpy(tmp_output.data(), nchw_output->host<float>(),
+                   nchw_output->elementSize());
+        }
 
         ret = push_instpool_map_inst_by_rt(res_type, inst);
+        srlog_error_return(!ret,
+                           ("push_instpool_map_inst_by_rt( {} ) error!",
+                            static_cast<int>(res_type)),
+                           ret);
         return ret;
     }
 
