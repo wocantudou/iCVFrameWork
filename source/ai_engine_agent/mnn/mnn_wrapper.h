@@ -167,13 +167,20 @@ class MNNWrapper
     }
 
     int32_t inference(const RESTYPE res_type,
-                      const std::vector<std::vector<float>> &input,
+                      const std::vector<std::vector<float>> &inputs,
                       const std::vector<Dims> &input_dims,
-                      std::vector<std::vector<float>> &output,
+                      std::vector<std::vector<float>> &outputs,
                       std::vector<Dims> &output_dims, int32_t batch_num = 1) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
+        std::shared_ptr<DnnInst> inst;
+        ret = pop_instpool_map_inst_by_rt(res_type, inst);
+        auto input_tensors = model_handle->net_->getSessionInputAll(
+            inst->execute_handle_->session_);
+
+        ret = push_instpool_map_inst_by_rt(res_type, inst);
         return ret;
     }
 
