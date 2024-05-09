@@ -1,5 +1,6 @@
 #pragma once
 #include "opencv2/opencv.hpp"
+#include <map>
 #ifdef USE_AI_ENGINE_MNN
 #include "mnn/mnn_wrapper.h" //mnn
 #endif
@@ -22,9 +23,7 @@ class iCVBaseEngine {
                                      void *reserved) = 0;
     int32_t forward_impl(const RESTYPE res_type, void *reserved) {
         int32_t ret = ICVBASE_NO_ERROR;
-        ret = DnnWrapperInst()->inference(
-            res_type, input_data_buffers_, input_data_shapes_,
-            output_data_buffers_, output_data_shapes_);
+        ret = DnnWrapperInst()->inference(res_type, inputs_, outputs_);
         return ret;
     }
 
@@ -73,91 +72,8 @@ class iCVBaseEngine {
     }
 
   public:
-    int32_t prepare_input_data_buffer(const RESTYPE res_type) {
-        int32_t ret = ICVBASE_NO_ERROR;
-        srlog_error_return(
-            (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
-            ("postprocess( {} ) failed.", static_cast<int>(res_type)),
-            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_ENGINE");
-        std::string TAG = DnnWrapperInst()->restype_name_map_.at(res_type) +
-                          "_" + __FUNCTION__;
-        iCVProfilerProfiler(TAG);
-        ret = DnnWrapperInst()->get_input_shape(res_type, input_data_shapes_);
-        srlog_error_return(!ret,
-                           ("DnnWrapperInst()->get_input_shape( {} ) failed.",
-                            static_cast<int>(res_type)),
-                           ret);
-        ret = DnnWrapperInst()->get_output_shape(res_type, output_data_shapes_);
-        srlog_error_return(!ret,
-                           ("DnnWrapperInst()->get_output_shape( {} ) failed.",
-                            static_cast<int>(res_type)),
-                           ret);
-        int32_t input_data_size = input_data_shapes_.size();
-        srlog_verify_para(input_data_size > 0, ICVBASE_SHAPE_ERROR);
-        input_data_buffers_.resize(input_data_size);
-        for (int32_t idx = 0; idx < input_data_buffers_.size(); ++idx) {
-            int32_t data_buffer_size = input_data_shapes_.at(idx).count();
-            srlog_verify_para(data_buffer_size > 0, ICVBASE_SHAPE_ERROR);
-            input_data_buffers_.at(idx).resize(data_buffer_size, 0.f);
-        }
-        return ret;
-    }
-
-    int32_t prepare_input_output_data_buffer(const RESTYPE res_type) {
-        int32_t ret = ICVBASE_NO_ERROR;
-        srlog_error_return(
-            (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
-            ("postprocess( {} ) failed.", static_cast<int>(res_type)),
-            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_ENGINE");
-        std::string TAG = DnnWrapperInst()->restype_name_map_.at(res_type) +
-                          "_" + __FUNCTION__;
-        iCVProfilerProfiler(TAG);
-        ret = DnnWrapperInst()->get_input_shape(res_type, input_data_shapes_);
-        srlog_error_return(!ret,
-                           ("DnnWrapperInst()->get_input_shape( {} ) failed.",
-                            static_cast<int>(res_type)),
-                           ret);
-        ret = DnnWrapperInst()->get_output_shape(res_type, output_data_shapes_);
-        srlog_error_return(!ret,
-                           ("DnnWrapperInst()->get_output_shape( {} ) failed.",
-                            static_cast<int>(res_type)),
-                           ret);
-        const int32_t max_shapes_size =
-            (std::max)(input_data_shapes_.size(), output_data_shapes_.size());
-        srlog_verify_para(max_shapes_size > 0, ICVBASE_SHAPE_ERROR);
-
-        std::vector<int32_t> new_input_data_size_vec(max_shapes_size, 0);
-        std::transform(
-            input_data_shapes_.begin(), input_data_shapes_.end(),
-            new_input_data_size_vec.begin(),
-            [](const DnnWrapperClass::Dims &shape) { return shape.count(); });
-        std::vector<int32_t> new_output_data_size_vec(max_shapes_size, 0);
-        std::transform(
-            output_data_shapes_.begin(), output_data_shapes_.end(),
-            new_output_data_size_vec.begin(),
-            [](const DnnWrapperClass::Dims &shape) { return shape.count(); });
-        input_output_data_buffers_.resize(max_shapes_size);
-        for (int32_t idx = 0; idx < max_shapes_size; ++idx) {
-            int32_t data_buffer_size =
-                (std::max)(new_input_data_size_vec.at(idx),
-                           new_output_data_size_vec.at(idx));
-            srlog_verify_para(data_buffer_size > 0, ICVBASE_SHAPE_ERROR);
-            input_output_data_buffers_.at(idx).resize(data_buffer_size, 0.f);
-        }
-
-        return ret;
-    }
-
-  public:
-    using DataBuf = std::vector<std::vector<float>>;
-    using DataShape = std::vector<DnnWrapperClass::Dims>;
-    DataBuf input_data_buffers_;
-    DataBuf output_data_buffers_;
-    DataBuf input_output_data_buffers_;
-    DataShape input_data_shapes_;
-    DataShape output_data_shapes_;
+    std::map<std::string, DnnWrapperClass::DnnDataInfo> inputs_;
+    std::map<std::string, DnnWrapperClass::DnnDataInfo> outputs_;
 };
 
 class iCVBaseDef {
