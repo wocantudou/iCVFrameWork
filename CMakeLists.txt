@@ -86,3 +86,4 @@ endif()
 # *********************** FOR DEPENDS End ***********************
 
 add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
+add_subdirectory(${source_dir}/modules/restype/iCVFaceDetect)

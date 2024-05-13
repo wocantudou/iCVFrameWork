@@ -74,6 +74,7 @@ class iCVBaseEngine {
   public:
     std::map<std::string, DnnWrapperClass::DnnDataInfo> inputs_;
     std::map<std::string, DnnWrapperClass::DnnDataInfo> outputs_;
+    std::once_flag once_flag_;
 };
 
 class iCVBaseDef {
@@ -215,4 +216,5 @@ class iCVBaseDef {
 
   public:
     RESTYPE res_type_;
+    cv::Mat input_mat_;
 };

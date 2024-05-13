@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #ifndef BOOL
-#define BOOL int
+#define BOOL int32_t
 #define TRUE 1
 #define FALSE 0
 #endif
@@ -67,25 +67,25 @@ enum ICV_BASE_IMG_FMT {
 
 typedef struct _ICVBaseImgDataIn {
     char *data;
-    int w;
-    int h;
-    int data_byte_size;
+    int32_t w;
+    int32_t h;
+    int32_t data_byte_size;
     ICV_BASE_IMG_FMT fmt;
     _ICVBaseImgDataIn *next;
 } ICVBaseImgDataIn;
 
 typedef struct _ICVBaseAudDataIn {
     char *data;
-    int data_byte_size;
-    int sample_rate;
-    int sample_bits;
-    int channel_num;
+    int32_t data_byte_size;
+    int32_t sample_rate;
+    int32_t sample_bits;
+    int32_t channel_num;
     _ICVBaseAudDataIn *next;
 } ICVBaseAudDataIn;
 
 typedef struct _ICVBaseTxtDataIn {
     char *data;
-    int data_byte_size;
+    int32_t data_byte_size;
     _ICVBaseTxtDataIn *next;
 } ICVBaseTxtDataIn;
 
@@ -122,7 +122,7 @@ typedef struct _ICVBaseRect2f {
 typedef struct _ICVBaseRect2fWithInfo {
     ICVBaseRect2f rect;
     float conf_score;
-    int id;
+    int32_t id;
 } ICVBaseRect2fWithInfo;
 
 typedef struct _ICVBasePoint2f {

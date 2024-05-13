@@ -66,7 +66,7 @@ class MNNWrapper
                             static_cast<int>(res_type), res_path),
                            ret);
         DNNModelHandle model_handle = new (std::nothrow) DNNModel();
-        srlog_verify_ptr(model_handle, ICVBASE_MEMORY_ALLOCATION_ERROR);
+        srlog_verify_ptr(model_handle, ICVBASE_MEMORY_ERROR);
         for (int idx = 0; idx < RES_IDX_COUNT; idx++) {
             model_handle->res_buffer_[idx] =
                 dnn_res_map_.at(res_type)->get_mem_by_idx(idx);
@@ -102,7 +102,7 @@ class MNNWrapper
             !ret, ("add_res_from_mem( {} ) error!", static_cast<int>(res_type)),
             ret);
         DNNModelHandle model_handle = new (std::nothrow) DNNModel();
-        srlog_verify_ptr(model_handle, ICVBASE_MEMORY_ALLOCATION_ERROR);
+        srlog_verify_ptr(model_handle, ICVBASE_MEMORY_ERROR);
         for (int idx = 0; idx < RES_IDX_COUNT; idx++) {
             model_handle->res_buffer_[idx] =
                 dnn_res_map_.at(res_type)->get_mem_by_idx(idx);
@@ -210,7 +210,7 @@ class MNNWrapper
                             ->copyFromHostTensor(nchw_input.get());
             srlog_error_return(
                 flag, ("copyFromHostTensor( {} ) error!", input_kv.first),
-                ICVBASE_MEMORY_ALLOCATION_ERROR);
+                ICVBASE_MEMORY_ERROR);
         }
 
         // run
@@ -263,7 +263,7 @@ class MNNWrapper
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         DNNExecuteHandle execute_handle = new (std::nothrow) DNNExecute();
-        srlog_verify_ptr(execute_handle, ICVBASE_MEMORY_ALLOCATION_ERROR);
+        srlog_verify_ptr(execute_handle, ICVBASE_MEMORY_ERROR);
         MNN::ScheduleConfig config;
         config.numThread = 1;
         config.backupType = MNN_FORWARD_CPU;
