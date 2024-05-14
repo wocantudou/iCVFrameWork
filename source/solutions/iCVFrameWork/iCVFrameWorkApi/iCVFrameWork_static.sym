@@ -11,3 +11,4 @@ iCVFrameWorkResourceAddFromMem
 iCVFrameWorkResourceDelete
 iCVFrameWorkGetResVersion
 iCVFrameWorkGetEngineVersion
+iCVFrameWorkGetExpiredTime

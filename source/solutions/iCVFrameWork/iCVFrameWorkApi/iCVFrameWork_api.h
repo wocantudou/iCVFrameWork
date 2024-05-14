@@ -1,6 +1,6 @@
 #pragma once
 #include "iCVBase_errcode.h"
-#include "iCVFrameWork_types.h"
+#include "iCVFace_types.h"
 
 #if defined(_MSC_VER) /* Microsoft Visual C++ */
 #pragma pack(push, 8)
@@ -43,7 +43,9 @@ ENGINE_API(int32_t, iCVFrameWorkResourceAdd,
 ENGINE_API(int32_t, iCVFrameWorkResourceAddFromMem,
            (const RES_SET *res_set, const void *data, const int32_t len));
 ENGINE_API(int32_t, iCVFrameWorkResourceDelete, (const RES_SET *res_set));
-ENGINE_API(int32_t, iCVFrameWorkGetResVersion, (const char **expired_time));
+ENGINE_API(int32_t, iCVFrameWorkGetExpiredTime, (const char **expired_time));
+ENGINE_API(int32_t, iCVFrameWorkGetResVersion,
+           (const RES_SET *res_set, int *version_num));
 ENGINE_API(int32_t, iCVFrameWorkGetEngineVerion,
            (char *engine_version, int32_t len));
 

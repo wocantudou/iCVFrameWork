@@ -13,3 +13,4 @@ EXPORTS
     iCVFrameWorkResourceDelete @11
     iCVFrameWorkGetResVersion @12
     iCVFrameWorkGetEngineVersion @13
+    iCVFrameWorkGetExpiredTime @14

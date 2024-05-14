@@ -318,14 +318,15 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
         xmax = clip_coord(xmax, ori_img_.cols);
         ymax = clip_coord(ymax, ori_img_.rows);
 
-        face_targets.face[is_face_index].face_rect_with_info.rect.x = xmin;
-        face_targets.face[is_face_index].face_rect_with_info.rect.y = ymin;
-        face_targets.face[is_face_index].face_rect_with_info.rect.w =
+        face_targets.faces[is_face_index].face_rect_with_info.rect.x = xmin;
+        face_targets.faces[is_face_index].face_rect_with_info.rect.y = ymin;
+        face_targets.faces[is_face_index].face_rect_with_info.rect.w =
             xmax - xmin;
-        face_targets.face[is_face_index].face_rect_with_info.rect.h =
+        face_targets.faces[is_face_index].face_rect_with_info.rect.h =
             ymax - ymin;
-        face_targets.face[is_face_index].face_rect_with_info.conf_score = score;
-        face_targets.face[is_face_index].face_rect_with_info.id = 10086;
+        face_targets.faces[is_face_index].face_rect_with_info.conf_score =
+            score;
+        face_targets.faces[is_face_index].face_rect_with_info.id = 10086;
         is_face_index++;
     }
     face_targets.face_num = is_face_index;

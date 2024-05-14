@@ -7,6 +7,7 @@ typedef struct _ICVFace {
 } ICVFace;
 
 typedef struct _ICVFaces {
-    ICVFace face[MAX_DETECT_OBJECT_NUM];
+    ICVFace faces[MAX_DETECT_OBJECT_NUM];
     int32_t face_num;
+    int32_t face_idx;
 } ICVFaces;

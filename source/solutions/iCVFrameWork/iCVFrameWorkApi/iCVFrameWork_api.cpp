@@ -81,7 +81,7 @@ int32_t ICVBASEAPI iCVFrameWorkResourceDelete(const RES_SET *res_set) {
 }
 
 int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RES_SET *res_set,
-                                             int *version) {
+                                             int *version_num) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     return ret;

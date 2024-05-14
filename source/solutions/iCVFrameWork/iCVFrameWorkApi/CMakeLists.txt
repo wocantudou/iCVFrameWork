@@ -32,6 +32,8 @@ ModuleDependLibs(tmp_thirdparty_lib)
 
 # unset(thirdparty_lib)
 set(thirdparty_lib "")
+# linker lib from modules
+list(APPEND thirdparty_lib "iCVFaceDetect_static")
 
 list(APPEND thirdparty_lib "${tmp_thirdparty_lib}")
 

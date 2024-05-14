@@ -1,0 +1,76 @@
+﻿#generate library
+
+include_directories(
+./
+../DSMRuntimeApi
+../../submodules/iCVBaseUtilsLib/include/utils
+)
+#*************executable target*********
+aux_source_directory(.  DSMVideoTest_execute)
+# add thridyparty library
+set(thirdparty_lib_dir "")
+set(thirdparty_lib "")
+# list(APPEND thirdparty_lib "iflyFaceRetrieval_shared")
+if(MSVC)
+	list(APPEND thirdparty_lib_dir "../../thirdparty/opencv/x64/vc15/lib")
+	list(APPEND thirdparty_lib_dir ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
+	list(APPEND thirdparty_lib_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
+	list(APPEND thirdparty_lib "iCVFrameWorkRT")
+	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND NOT BUILD_OPENCV)
+		list(APPEND thirdparty_lib "opencv_videoio409d;opencv_imgcodecs409d;libpngd;libtiffd;libjpeg-turbod;libjasperd;IlmImfd;libwebpd")
+	else () 
+		list(APPEND thirdparty_lib "opencv_videoio409;opencv_imgcodecs409;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
+	endif()
+else ()
+	if(USE_FFMPEG)
+		list(APPEND thirdparty_lib_dir $ENV{PKG_CONFIG_PATH}/..)
+		if (CMAKE_SYSTEM_NAME STREQUAL "QNX")
+			set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,noexecstack,-z,relro,-z,now,-z,defs")
+		endif ()
+	endif()
+	# add thridyparty library
+	list(APPEND thirdparty_lib_dir ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
+	list(APPEND thirdparty_lib_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+	if (CMAKE_SYSTEM_NAME STREQUAL "Android")
+		list(APPEND thirdparty_lib ${ENGINE_NAME_WITH_VERSION})
+	else()
+		list(APPEND thirdparty_lib ${ENGINE_NAME})
+	endif()
+	
+	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND NOT BUILD_OPENCV)
+		list(APPEND thirdparty_lib "opencv_videoiod;opencv_imgcodecsd;libpngd;libtiffd;libjpeg-turbod;libjasperd;IlmImfd;libwebpd")
+	else()
+		list(APPEND thirdparty_lib "opencv_videoio;opencv_imgcodecs;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
+	endif()
+endif ()
+
+link_directories(
+    ${thirdparty_lib_dir}
+    #${user_lib_dir}
+)
+
+#link_libraries(
+#    ${thirdparty_lib}
+#)
+
+set(EXE_TARGET_NAME DSMVideoTest)
+if(MSVC)
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON) #open directory
+	#*************executable target*********
+	add_executable(${EXE_TARGET_NAME}  ${DSMVideoTest_execute})
+	target_link_libraries (${EXE_TARGET_NAME} ${thirdparty_lib})
+	set_property(TARGET ${EXE_TARGET_NAME} PROPERTY FOLDER "DSMVideoTest")
+	#new add 
+	SET_TARGET_PROPERTIES(${EXE_TARGET_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
+else()
+	#*************executable target*********
+	add_executable(${EXE_TARGET_NAME}  ${DSMVideoTest_execute})
+	target_link_libraries (${EXE_TARGET_NAME} ${thirdparty_lib})
+	if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+		add_custom_command(TARGET ${EXE_TARGET_NAME} POST_BUILD
+						   WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+						   COMMAND ${CMAKE_STRIP} "-s" "${EXE_TARGET_NAME}")
+	endif()
+endif()
+
+
