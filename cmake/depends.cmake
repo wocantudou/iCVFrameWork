@@ -101,6 +101,7 @@ function(ModuleDependLibs thirdparty_libs)
     list(APPEND thirdparty_lib "ipedu_static")
     list(APPEND thirdparty_lib "ipup_static")
     list(APPEND thirdparty_lib "decrypt")
+    list(APPEND thirdparty_lib "MNN")
     if(BUILD_WITH_EASY_PROFILER)
         list(APPEND thirdparty_lib "easy_profiler")
     endif()
@@ -170,12 +171,11 @@ function(ModuleLinker module_name thirdparty_libs)
     message(STATUS "ModuleLinker thirdparty_libs = ${thirdparty_libs}")
     #***************static library************
     aux_source_directory(.  ${module_name}_STATIC_LIB)
-    aux_source_directory(${source_dir}/ai_engine_agent ${module_name}_STATIC_LIB)
+    # aux_source_directory(${source_dir}/ai_engine_agent ${module_name}_STATIC_LIB)
 
     #***************shared library************
     aux_source_directory(.  ${module_name}_SHARED_LIB)
-    aux_source_directory(../ ${module_name}_SHARED_LIB)
-    aux_source_directory(${source_dir}/ai_engine_agent ${module_name}_SHARED_LIB)
+    aux_source_directory(${source_dir}/ai_engine_agent/mnn ${module_name}_SHARED_LIB)
 
     
     if(MSVC)

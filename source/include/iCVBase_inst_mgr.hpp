@@ -262,7 +262,7 @@ class iCVBaseInstMgr {
         cfg_path_ = "";
     }
 
-  private:
+  protected:
     bool inited_;
     std::string cfg_path_;
     long inst_id_;

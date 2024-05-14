@@ -1,8 +1,9 @@
 
 
-include_directories(
+include_directories(./
                     ${PROJECT_BINARY_DIR}
-                    ./)
+                    ${PROJECT_SOURCE_DIR}/source/modules/restype/iCVFaceDetect
+                    )
 set(ENGINE_NAME "" CACHE INTERNAL "")
 set(ENGINE_VERSION_MAJOR "" CACHE INTERNAL "")
 set(ENGINE_VERSION_MINOR "" CACHE INTERNAL "")
@@ -21,10 +22,10 @@ message(STATUS "###############ENGINE_NAME_WITH_VERSION = ${ENGINE_NAME_WITH_VER
 
 # for static
 aux_source_directory(. iCVFrameWork_RT_API_STATIC)
-aux_source_directory(${source_dir}/ai_engine_agent iCVFrameWork_RT_API_STATIC)
+aux_source_directory(${source_dir}/ai_engine_agent/mnn iCVFrameWork_RT_API_STATIC)
 # for shared
 aux_source_directory(. iCVFrameWork_RT_API_SHARED)
-aux_source_directory(${source_dir}/ai_engine_agent iCVFrameWork_RT_API_SHARED)
+aux_source_directory(${source_dir}/ai_engine_agent/mnn iCVFrameWork_RT_API_SHARED)
 
 unset(tmp_thirdparty_lib)
 set(tmp_thirdparty_lib "")

@@ -1,7 +1,7 @@
 #include "iCVFrameWork_api.h"
-#include "iCVBase_inst_mgr.hpp"
 #include "iCVFrameWork_cfg.h"
 #include "iCVFrameWork_config.h"
+#include "iCVFrameWork_mgr.hpp"
 
 int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
                                           void *reserved) {
