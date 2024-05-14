@@ -6,9 +6,9 @@
 int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
                                           void *reserved) {
     int32_t ret = ICVBASE_NO_ERROR;
-    G_CFG_ICVFRAMEWORK->init(cfg_path);
+    G_CFG_ICVFRAMEWORK()->init(cfg_path);
     srlog_open(cfg_path,
-               G_CFG_ICVFRAMEWORK->get_iCVFrameWork_LogPath().c_str());
+               G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_LogPath().c_str());
     srlog_perf(LOG_PROF_TAG, "API");
     return ret;
 }

@@ -7,7 +7,7 @@ class iCVFrameWorkInstMgr : public iCVBaseInstMgr {
         res_info_umap_.clear();
         iCVBaseResInfo res_info;
         res_info.res_path =
-            G_CFG_ICVFRAMEWORK->get_iCVFrameWork_FaceDetectResPath();
+            G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_FaceDetectResPath();
         res_info_umap_.insert(
             std::make_pair(RESTYPE_FACE_DETECT_CPU, res_info));
         return ret;
