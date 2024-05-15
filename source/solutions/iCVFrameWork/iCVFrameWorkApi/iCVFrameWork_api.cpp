@@ -33,8 +33,8 @@ int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
     g_iCVFrameWork_engine_version = engine_version;
     g_iCVFrameWork_permission = true; // TODO
     ret = G_iCVFrameWorkInstMgr()->init(cfg_path);
-    srlog_error_return(!ret, ("G_iCVFrameWorkInstMgr()->init( {} )", cfg_path),
-                       ret);
+    srlog_error_return(
+        !ret, ("G_iCVFrameWorkInstMgr()->init( {} ) error!", cfg_path), ret);
     g_iCVFrameWork_init = true;
     std::cout << "Initialize successful ..." << std::endl;
     srlog_info("Initialize successful ...");
@@ -44,6 +44,15 @@ int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
 int32_t ICVBASEAPI iCVFrameWorkUninitialize() {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    ret = G_iCVFrameWorkInstMgr()->fini();
+    srlog_error_return(!ret, ("G_iCVFrameWorkInstMgr()->fini() error!"), ret);
+    std::cout << "Uninitialize successful ..." << std::endl;
+    srlog_info("Uninitialize successful ...");
+    srlog_close();
+    g_iCVFrameWork_init = false;
+    g_iCVFrameWork_permission = false;
     return ret;
 }
 
@@ -51,18 +60,48 @@ int32_t ICVBASEAPI iCVFrameWorkCreateInst(iCVFW_INST *inst,
                                           const RESTYPE res_type) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(inst, ICVBASE_MEMORY_ERROR);
+    srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
+                      ICVBASE_INPUT_ERROR);
+    long inst_id = -1;
+    ret = G_iCVFrameWorkInstMgr()->create_inst(res_type, inst_id);
+    srlog_error_return(!ret,
+                       ("G_iCVFrameWorkInstMgr()->create_inst( {}, {} ) error!",
+                        static_cast<int>(res_type), inst_id),
+                       ret);
+    *inst = reinterpret_cast<iCVFW_INST>(inst_id);
     return ret;
 }
 
 int32_t ICVBASEAPI iCVFrameWorkDestroyInst(iCVFW_INST *inst) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(inst, ICVBASE_MEMORY_ERROR);
+    long inst_id = *(reinterpret_cast<long *>(inst));
+    ret = G_iCVFrameWorkInstMgr()->destroy_inst(inst_id);
+    srlog_error_return(
+        !ret, ("G_iCVFrameWorkInstMgr()->destroy_inst( {} ) error!", inst_id),
+        ret);
+    *inst = NULL;
+    inst = NULL;
     return ret;
 }
 
 int32_t ICVBASEAPI iCVFrameWorkResetInst(iCVFW_INST inst) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(inst, ICVBASE_MEMORY_ERROR);
+    long inst_id = reinterpret_cast<long>(inst);
+    ret = G_iCVFrameWorkInstMgr()->reset_inst(inst_id);
+    srlog_error_return(
+        !ret, ("G_iCVFrameWorkInstMgr()->reset_inst( {} ) error!", inst_id),
+        ret);
     return ret;
 }
 
@@ -70,6 +109,18 @@ int32_t ICVBASEAPI iCVFrameWorkSetParameter(iCVFW_INST inst, const char *param,
                                             const char *value) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(inst, ICVBASE_MEMORY_ERROR);
+    srlog_verify_ptr(param, ICVBASE_MEMORY_ERROR);
+    srlog_verify_ptr(value, ICVBASE_MEMORY_ERROR);
+    long inst_id = reinterpret_cast<long>(inst);
+    ret = G_iCVFrameWorkInstMgr()->set_param(inst_id, param, value);
+    srlog_error_return(!ret,
+                       ("G_iCVFrameWorkInstMgr()->set_param( {}, {}, {} ) "
+                        "error!",
+                        inst_id, param, value),
+                       ret);
     return ret;
 }
 
@@ -77,6 +128,19 @@ int32_t ICVBASEAPI iCVFrameWorkGetParameter(iCVFW_INST inst, const char *param,
                                             char *value, int32_t len) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(inst, ICVBASE_MEMORY_ERROR);
+    srlog_verify_ptr(param, ICVBASE_MEMORY_ERROR);
+    srlog_verify_ptr(value, ICVBASE_MEMORY_ERROR);
+    srlog_verify_para(len > 0, ICVBASE_INPUT_ERROR);
+    long inst_id = reinterpret_cast<long>(inst);
+    ret = G_iCVFrameWorkInstMgr()->get_param(inst_id, param, value, len);
+    srlog_error_return(!ret,
+                       ("G_iCVFrameWorkInstMgr()->get_param( {}, {}, {}, {} ) "
+                        "error!",
+                        inst_id, param, value, len),
+                       ret);
     return ret;
 }
 
