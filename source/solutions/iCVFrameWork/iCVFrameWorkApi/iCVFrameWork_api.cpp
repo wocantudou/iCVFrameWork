@@ -182,12 +182,30 @@ int32_t ICVBASEAPI iCVFrameWorkResourceAddFromMem(const RESTYPE res_type,
                                                   const int32_t len) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
+                      ICVBASE_INPUT_ERROR);
+    ret = G_iCVFrameWorkInstMgr()->setup(res_type, data, len);
+    srlog_error_return(!ret,
+                       ("G_iCVFrameWorkInstMgr()->setup( {}, {}, {} ) error!",
+                        static_cast<int>(res_type), data, len),
+                       ret);
     return ret;
 }
 
 int32_t ICVBASEAPI iCVFrameWorkResourceDelete(const RESTYPE res_type) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
+                      ICVBASE_INPUT_ERROR);
+    ret = G_iCVFrameWorkInstMgr()->shutdown(res_type);
+    srlog_error_return(!ret,
+                       ("G_iCVFrameWorkInstMgr()->shutdown( {} ) error!",
+                        static_cast<int>(res_type)),
+                       ret);
     return ret;
 }
 
@@ -195,18 +213,29 @@ int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RESTYPE res_type,
                                              int *version_num) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
+                      ICVBASE_INPUT_ERROR);
+    return ret;
+}
+
+int32_t ICVBASEAPI iCVFrameWorkGetEngineVerion(const char **engine_version) {
+    int32_t ret = ICVBASE_NO_ERROR;
+    srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(engine_version, ICVBASE_MEMORY_ERROR);
+    *engine_version = g_iCVFrameWork_engine_version.c_str();
     return ret;
 }
 
 int32_t ICVBASEAPI iCVFrameWorkGetExpiredTime(const char **expired_time) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
-    return ret;
-}
-
-int32_t ICVBASEAPI iCVFrameWorkGetEngineVerion(char *engine_version,
-                                               int32_t len) {
-    int32_t ret = ICVBASE_NO_ERROR;
-    srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    std::cerr << "Supported Soon." << std::endl;
+    srlog_info("Supported Soon.");
     return ret;
 }
