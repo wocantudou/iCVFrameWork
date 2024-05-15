@@ -39,13 +39,13 @@ ENGINE_API(int32_t, iCVFrameWorkGetParameter,
 ENGINE_API(int32_t, iCVFrameWorkGetResult,
            (iCVFW_INST inst, const void *in_data, void *out_data));
 ENGINE_API(int32_t, iCVFrameWorkResourceAdd,
-           (const RES_SET *res_set, const char *res_path));
+           (const RESTYPE res_type, const char *res_path));
 ENGINE_API(int32_t, iCVFrameWorkResourceAddFromMem,
-           (const RES_SET *res_set, const void *data, const int32_t len));
-ENGINE_API(int32_t, iCVFrameWorkResourceDelete, (const RES_SET *res_set));
+           (const RESTYPE res_type, const void *data, const int32_t len));
+ENGINE_API(int32_t, iCVFrameWorkResourceDelete, (const RESTYPE res_type));
 ENGINE_API(int32_t, iCVFrameWorkGetExpiredTime, (const char **expired_time));
 ENGINE_API(int32_t, iCVFrameWorkGetResVersion,
-           (const RES_SET *res_set, int *version_num));
+           (const RESTYPE res_type, int *version_num));
 ENGINE_API(int32_t, iCVFrameWorkGetEngineVerion,
            (char *engine_version, int32_t len));
 

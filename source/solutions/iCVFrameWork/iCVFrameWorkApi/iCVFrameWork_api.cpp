@@ -148,17 +148,36 @@ int32_t ICVBASEAPI iCVFrameWorkGetResult(iCVFW_INST inst, const void *in_data,
                                          void *out_data) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_ptr(inst, ICVBASE_MEMORY_ERROR);
+    srlog_verify_ptr(in_data, ICVBASE_MEMORY_ERROR);
+    srlog_verify_ptr(out_data, ICVBASE_MEMORY_ERROR);
+    long inst_id = reinterpret_cast<long>(inst);
+    ret = G_iCVFrameWorkInstMgr()->run_inst(inst_id, in_data, out_data);
+    srlog_error_return(
+        !ret, ("G_iCVFrameWorkInstMgr()->run_inst( {} ) error!", inst_id), ret);
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkResourceAdd(const RES_SET *res_set,
+int32_t ICVBASEAPI iCVFrameWorkResourceAdd(const RESTYPE res_type,
                                            const char *res_path) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
+    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
+                      ICVBASE_INPUT_ERROR);
+    ret = G_iCVFrameWorkInstMgr()->setup(res_type, res_path);
+    srlog_error_return(!ret,
+                       ("G_iCVFrameWorkInstMgr()->setup( {}, {} ) error!",
+                        static_cast<int>(res_type), res_path),
+                       ret);
+
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkResourceAddFromMem(const RES_SET *res_set,
+int32_t ICVBASEAPI iCVFrameWorkResourceAddFromMem(const RESTYPE res_type,
                                                   const void *data,
                                                   const int32_t len) {
     int32_t ret = ICVBASE_NO_ERROR;
@@ -166,13 +185,13 @@ int32_t ICVBASEAPI iCVFrameWorkResourceAddFromMem(const RES_SET *res_set,
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkResourceDelete(const RES_SET *res_set) {
+int32_t ICVBASEAPI iCVFrameWorkResourceDelete(const RESTYPE res_type) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RES_SET *res_set,
+int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RESTYPE res_type,
                                              int *version_num) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
