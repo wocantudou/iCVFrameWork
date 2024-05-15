@@ -25,6 +25,7 @@ option(BUILD_WITH_OPENCV "Build with OpenCV." ON)
 option(USE_FFMPEG "Build OpenCV with FFMpeg." OFF)
 option(ENGINE_DATA_DUMP "Dump engine input/output data for engine." OFF)
 option(USE_AI_ENGINE_MNN "Use mnn for AI engine." ON)
+option(SMOKING_VERSION "Smoking Verson for Engine." ON)
 
 find_package(Git QUIET)
 if(GIT_FOUND AND NOT EXISTS "${source_dir}/submodules/iCVBaseUtilsLib/.git")
@@ -55,7 +56,10 @@ if(ENGINE_DATA_DUMP)
     message(STATUS "add_definitions(-DENGINE_DATA_DUMP)")
 endif()
 
-
+if(SMOKING_VERSION)
+    add_definitions(-DSMOKING_VERSION)
+    message(STATUS "add_definitions(-DSMOKING_VERSION)")
+endif()
 
 include(${PROJECT_SOURCE_DIR}/cmake/platform.cmake)
 # *********************** FOR DEPENDS Begin ***********************
