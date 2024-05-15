@@ -30,10 +30,8 @@ class iCVBaseInstMgr {
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         reset();
         cfg_path_ = cfg_path;
-        ret = register_res_info();
-        srlog_error_return(!ret, ("register_res_info error!"), ret);
-        ret = register_res_creator();
-        srlog_error_return(!ret, ("register_res_creator error!"), ret);
+        ret = res_inst_register();
+        srlog_error_return(!ret, ("res_inst_register error!"), ret);
         ret = DnnWrapperInst()->init();
         srlog_error_return(!ret, ("DnnWrapperInst()->init() error!"), ret);
         inited_ = true;
@@ -251,8 +249,7 @@ class iCVBaseInstMgr {
     }
 
   protected:
-    virtual int32_t register_res_info() = 0;
-    virtual int32_t register_res_creator() = 0;
+    virtual int32_t res_inst_register() = 0;
 
   private:
     void reset() {

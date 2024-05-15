@@ -19,4 +19,6 @@ class iCVFaceDetectInst : public iCVBaseDef {
     MmyoloFaceDetectWithEngine *face_detector_with_engine_;
 };
 
+std::unique_ptr<iCVBaseDef> creatorFaceDetectInst();
+
 #endif

@@ -2,7 +2,9 @@
 
 #include "iCVFaceDetect_cfg.h"
 #include "iCVFaceDetect_def.h"
-
+std::unique_ptr<iCVBaseDef> creatorFaceDetectInst() {
+    return make_unique_cust<iCVFaceDetectInst>();
+}
 iCVFaceDetectInst::iCVFaceDetectInst() { face_detector_with_engine_ = NULL; }
 
 iCVFaceDetectInst::~iCVFaceDetectInst() {}
