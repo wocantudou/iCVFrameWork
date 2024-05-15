@@ -210,13 +210,21 @@ int32_t ICVBASEAPI iCVFrameWorkResourceDelete(const RESTYPE res_type) {
 }
 
 int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RESTYPE res_type,
-                                             int *version_num) {
+                                             int32_t *version_num) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
     srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
     srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
                       ICVBASE_INPUT_ERROR);
+    srlog_verify_ptr(version_num, ICVBASE_MEMORY_ERROR);
+    ret = G_iCVFrameWorkInstMgr()->get_res_verion(res_type, *version_num);
+    srlog_error_return(
+        !ret,
+        ("G_iCVFrameWorkInstMgr()->get_res_verion( {}, {} ) error!",
+         static_cast<int>(res_type), *version_num),
+        ret);
+
     return ret;
 }
 

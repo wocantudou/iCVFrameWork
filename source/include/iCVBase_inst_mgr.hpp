@@ -26,8 +26,8 @@ class iCVBaseInstMgr {
   public:
     int32_t init(const std::string &cfg_path) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
+        srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
         reset();
         cfg_path_ = cfg_path;
         ret = res_inst_register();
@@ -39,8 +39,8 @@ class iCVBaseInstMgr {
     }
     int32_t fini() {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         ret = DnnWrapperInst()->fini();
         srlog_error_return(!ret, ("DnnWrapperInst()->fini() error!"), ret);
         reset();
@@ -50,6 +50,7 @@ class iCVBaseInstMgr {
 
     int32_t setup(const RESTYPE res_type, const char *res_path) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
@@ -57,7 +58,6 @@ class iCVBaseInstMgr {
             ("setup error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         iCVBaseResInfo res_info = res_info_umap_.at(res_type);
         std::string real_res_path;
         if (NULL == res_path) {
@@ -78,6 +78,7 @@ class iCVBaseInstMgr {
 
     int32_t setup(const RESTYPE res_type, const void *data, const int32_t len) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
@@ -85,7 +86,6 @@ class iCVBaseInstMgr {
             ("setup error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         if (0 == DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->add_resource(res_type, data, len);
             srlog_error_return(
@@ -99,6 +99,7 @@ class iCVBaseInstMgr {
 
     int32_t shutdown(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
@@ -106,7 +107,6 @@ class iCVBaseInstMgr {
             ("shutdown error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         if (0 == DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             ret = DnnWrapperInst()->del_resource(res_type);
             srlog_error_return(!ret,
@@ -119,6 +119,7 @@ class iCVBaseInstMgr {
 
     int32_t create_inst(const RESTYPE res_type, long &inst_id) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
             (0 != res_info_umap_.count(res_type) ||
@@ -126,7 +127,6 @@ class iCVBaseInstMgr {
             ("create_inst error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         {
             std::lock_guard<std::mutex> lock(mtx_);
             inst_umap_.insert(std::pair<long, std::unique_ptr<iCVBaseDef>>(
@@ -160,11 +160,11 @@ class iCVBaseInstMgr {
     }
     int32_t destroy_inst(const long inst_id) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return((0 != inst_umap_.count(inst_id)),
                            ("destroy_inst( {} ) failed.", inst_id),
                            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         const RESTYPE res_type = inst->res_type_;
@@ -192,11 +192,11 @@ class iCVBaseInstMgr {
     }
     int32_t reset_inst(const long inst_id) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return((0 != inst_umap_.count(inst_id)),
                            ("reset_inst( {} ) failed.", inst_id),
                            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         ret = inst->reset_inst();
@@ -204,13 +204,13 @@ class iCVBaseInstMgr {
     }
     int32_t run_inst(const long inst_id, const void *in_data, void *out_data) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_verify_ptr(in_data, ICVBASE_INPUT_ERROR);
         srlog_verify_ptr(out_data, ICVBASE_INPUT_ERROR);
         srlog_error_return((0 != inst_umap_.count(inst_id)),
                            ("run_inst( {} ) failed.", inst_id),
                            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         ret = inst->process(in_data, out_data);
@@ -219,13 +219,13 @@ class iCVBaseInstMgr {
     int32_t set_param(const long inst_id, const char *param,
                       const char *value) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_verify_ptr(param, ICVBASE_INPUT_ERROR);
         srlog_verify_ptr(value, ICVBASE_INPUT_ERROR);
         srlog_error_return((0 != inst_umap_.count(inst_id)),
                            ("set_param( {} ) failed.", inst_id),
                            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         ret = inst->set_param(param, value);
@@ -234,6 +234,7 @@ class iCVBaseInstMgr {
     int32_t get_param(const long inst_id, const char *param, char *value,
                       int32_t len) {
         int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_verify_ptr(param, ICVBASE_INPUT_ERROR);
         srlog_verify_ptr(value, ICVBASE_INPUT_ERROR);
@@ -241,10 +242,20 @@ class iCVBaseInstMgr {
         srlog_error_return((0 != inst_umap_.count(inst_id)),
                            ("get_param( {} ) failed.", inst_id),
                            ICVBASE_INPUT_ERROR);
-        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         auto &inst = inst_umap_.at(inst_id);
         srlog_verify_inst(inst, ICVBASE_INSTANCE_ERROR);
         ret = inst->get_param(param, value, len);
+        return ret;
+    }
+    int32_t get_res_verion(const RESTYPE res_type, int32_t &res_ver_num) {
+        int32_t ret = ICVBASE_NO_ERROR;
+        srlog_perf(LOG_PROF_TAG, "BASE_MGR");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        ret = DnnWrapperInst()->get_res_version(res_type, res_ver_num);
+        srlog_error_return(!ret,
+                           ("get_res_version({},{}) failed",
+                            static_cast<int>(res_type), res_ver_num),
+                           ret);
         return ret;
     }
 

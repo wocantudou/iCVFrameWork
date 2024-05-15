@@ -45,7 +45,7 @@ ENGINE_API(int32_t, iCVFrameWorkResourceAddFromMem,
 ENGINE_API(int32_t, iCVFrameWorkResourceDelete, (const RESTYPE res_type));
 ENGINE_API(int32_t, iCVFrameWorkGetExpiredTime, (const char **expired_time));
 ENGINE_API(int32_t, iCVFrameWorkGetResVersion,
-           (const RESTYPE res_type, int *version_num));
+           (const RESTYPE res_type, int32_t *version_num));
 ENGINE_API(int32_t, iCVFrameWorkGetEngineVerion, (const char **engine_version));
 
 #ifdef __cplusplus
