@@ -44,21 +44,22 @@ class MNNWrapper
   public:
     int32_t init(const char *workdir = NULL) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-
+        srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
+        inited_ = true;
         return ret;
     }
     int32_t fini() {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        inited_ = false;
         return ret;
     }
     int32_t add_resource(const RESTYPE res_type, const std::string &res_path) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         std::string key = "iflytek_cv3";
         ret = add_res_from_file(res_type, res_path, key.c_str());
         srlog_error_return(!ret,
@@ -94,8 +95,8 @@ class MNNWrapper
     int32_t add_resource(const RESTYPE res_type, const void *data,
                          const int32_t len) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         std::string key = "iflytek_cv3";
         ret = add_res_from_mem(res_type, data, len, key.c_str());
         srlog_error_return(
@@ -129,8 +130,8 @@ class MNNWrapper
 
     int32_t del_resource(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle;
         ret = pull_model_handle(res_type, model_handle);
         srlog_error_return(
@@ -153,8 +154,8 @@ class MNNWrapper
     int32_t prepare_inputs(const RESTYPE res_type,
                            std::map<std::string, DnnDataInfo> &inputs) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         inputs.clear();
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         std::shared_ptr<DnnInst> inst;
@@ -187,8 +188,8 @@ class MNNWrapper
                       std::map<std::string, DnnDataInfo> &outputs,
                       int32_t batch_num = 1) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         std::shared_ptr<DnnInst> inst;
         ret = pop_instpool_map_inst_by_rt(res_type, inst);
@@ -259,8 +260,8 @@ class MNNWrapper
 
     int32_t create_inst(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         DNNExecuteHandle execute_handle = new (std::nothrow) DNNExecute();
         srlog_verify_ptr(execute_handle, ICVBASE_MEMORY_ERROR);
@@ -286,8 +287,8 @@ class MNNWrapper
 
     int32_t destroy_inst(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
+        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         DNNExecuteHandle execute_handle;
         ret = destroy_instpool_map_inst_by_rt(res_type, execute_handle);

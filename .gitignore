@@ -6,5 +6,6 @@ cmake_build
 .vscode
 output/bin
 output/lib
+output/log
 
 !.gitkeep

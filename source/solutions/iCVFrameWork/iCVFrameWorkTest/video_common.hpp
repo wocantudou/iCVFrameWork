@@ -173,19 +173,8 @@ class CombInstBase {
             return ret;
         }
 
-        std::stringstream ss;
-#ifdef WIN32
-        ss << "log_path=../../../log/iCVFrameWork.log,cfg_path=../../../cfg/"
-           << "xlite_cfg"
-           << "/iCVFrameWork_for_windows.cfg,cfu_path=../../../cfu/"
-              "iCVFrameWorkLog_windows.cfu";
-#else
-        ss << "log_path=../../log/iCVFrameWork.log,cfg_path=../../cfg/"
-           << "xlite_cfg"
-           << "/iCVFrameWork.cfg,cfu_path=../../cfu/iCVFrameWorkLog.cfu";
-#endif
-        std::string init_params = ss.str();
-        ret = iCVFrameWorkInitialize_(init_params.c_str(), NULL);
+        std::string cfg_path = "../../cfg/iCVFrameWork/iCVFrameWork.cfg";
+        ret = iCVFrameWorkInitialize_(cfg_path.c_str(), NULL);
         if (ICVBASE_NO_ERROR != ret) {
             std::cerr << "iCVFrameWorkInitialize_ failed" << std::endl;
             return ret;

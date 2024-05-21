@@ -36,6 +36,7 @@ int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
     srlog_error_return(
         !ret, ("G_iCVFrameWorkInstMgr()->init( {} ) error!", cfg_path), ret);
     g_iCVFrameWork_init = true;
+    g_iCVFrameWork_init = true;
     std::cout << "Initialize successful ..." << std::endl;
     srlog_info("Initialize successful ...");
     return ret;
@@ -231,8 +232,8 @@ int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RESTYPE res_type,
 int32_t ICVBASEAPI iCVFrameWorkGetEngineVersion(const char **engine_version) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
-    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
-    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    // srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    // srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
     srlog_verify_ptr(engine_version, ICVBASE_MEMORY_ERROR);
     *engine_version = g_iCVFrameWork_engine_version.c_str();
     return ret;

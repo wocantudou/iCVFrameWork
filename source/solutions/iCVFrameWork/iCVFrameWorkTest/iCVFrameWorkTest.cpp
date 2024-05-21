@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
                   << " -t TestUnitType(int) -i input_path(string) [-o "
                      "output_path(string)], at least 7 parameter need but only "
                   << argc << " params provided!" << std::endl;
-        std::cerr << "-t [TYPE_VIDEO_FACEDETECT_TEST_UNIT(21)] -i [input "
+        std::cerr << "-t [TYPE_VIDEO_FACEDETECT_TEST_UNIT(1)] -i [input "
                      "videolist path] -o [output video path] -e [efficiency "
                      "mode(false)] -l [loop count(1) -p [pool size(1)]]"
                   << std::endl;
