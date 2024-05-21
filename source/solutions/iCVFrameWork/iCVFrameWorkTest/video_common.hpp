@@ -166,10 +166,10 @@ class CombInstBase {
         int ret = ICVBASE_NO_ERROR;
 
         constexpr int max_len = 128;
-        char engine_version[max_len] = {0};
-        ret = iCVFrameWorkGetEngineVerion_(engine_version, max_len);
+        const char *engine_version = "";
+        ret = iCVFrameWorkGetEngineVersion_(&engine_version);
         if (ICVBASE_NO_ERROR != ret) {
-            std::cerr << "iCVFrameWorkGetEngineVerion  failed..." << std::endl;
+            std::cerr << "iCVFrameWorkGetEngineVersion  failed..." << std::endl;
             return ret;
         }
 
@@ -185,7 +185,7 @@ class CombInstBase {
            << "/iCVFrameWork.cfg,cfu_path=../../cfu/iCVFrameWorkLog.cfu";
 #endif
         std::string init_params = ss.str();
-        ret = iCVFrameWorkInitialize_(init_params.c_str());
+        ret = iCVFrameWorkInitialize_(init_params.c_str(), NULL);
         if (ICVBASE_NO_ERROR != ret) {
             std::cerr << "iCVFrameWorkInitialize_ failed" << std::endl;
             return ret;
@@ -208,9 +208,7 @@ class CombInstBase {
         for (auto &res_and_path : res_and_path_map) {
             RESTYPE res_type = res_and_path.first;
             const char *res_path = res_and_path.second;
-            RES_SET res_set;
-            res_set.res_type = res_type;
-            ret = iCVFrameWorkResourceAdd_(&res_set, res_path);
+            ret = iCVFrameWorkResourceAdd_(res_type, res_path);
             if (ICVBASE_NO_ERROR != ret) {
                 std::cerr << "iCVFrameWorkResourceAdd_ " << res_type
                           << " failed, and res_path = " << res_path
@@ -266,10 +264,8 @@ class CombInstBase {
     static int del_all_res_you_add(COMB_RES &res_and_path_map) {
         int ret = ICVBASE_NO_ERROR;
         for (auto &curr_res : res_and_path_map) {
-            RES_SET res_set;
-            res_set.res_type = curr_res.first;
             // delete the common resource
-            ret = iCVFrameWorkResourceDelete_(&res_set);
+            ret = iCVFrameWorkResourceDelete_(curr_res.first);
             if (ICVBASE_NO_ERROR != ret) {
                 std::cout << "iCVFrameWorkResourceDelete_ " << curr_res.first
                           << " failed..." << std::endl;

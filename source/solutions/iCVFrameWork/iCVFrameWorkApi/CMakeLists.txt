@@ -2,6 +2,7 @@
 
 include_directories(./
                     ${PROJECT_BINARY_DIR}
+                    ${PROJECT_SOURCE_DIR}/source/include
                     ${PROJECT_SOURCE_DIR}/source/modules/restype/iCVFaceDetect
                     )
 set(ENGINE_NAME "" CACHE INTERNAL "")

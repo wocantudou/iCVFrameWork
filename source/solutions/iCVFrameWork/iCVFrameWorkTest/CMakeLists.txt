@@ -1,12 +1,27 @@
 ﻿#generate library
 
+# opencv 4.9.0
+include_directories(
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/core/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/features2d/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/flann/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/highgui/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/imgproc/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/imgcodecs/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/videoio/include
+    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/calib3d/include
+    )
+
 include_directories(
 ./
-../DSMRuntimeApi
-../../submodules/iCVBaseUtilsLib/include/utils
+${PROJECT_SOURCE_DIR}/source/include
+${PROJECT_SOURCE_DIR}/source/solutions/iCVFrameWork/iCVFrameWorkApi
+${PROJECT_SOURCE_DIR}/source/submodules/iCVBaseUtilsLib/include/utils
 )
+
 #*************executable target*********
-aux_source_directory(.  DSMVideoTest_execute)
+aux_source_directory(.  iCVFrameWorkTest_execute)
 # add thridyparty library
 set(thirdparty_lib_dir "")
 set(thirdparty_lib "")
@@ -17,9 +32,9 @@ if(MSVC)
 	list(APPEND thirdparty_lib_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
 	list(APPEND thirdparty_lib "iCVFrameWorkRT")
 	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND NOT BUILD_OPENCV)
-		list(APPEND thirdparty_lib "opencv_videoio409d;opencv_imgcodecs409d;libpngd;libtiffd;libjpeg-turbod;libjasperd;IlmImfd;libwebpd")
+		list(APPEND thirdparty_lib "opencv_videoio409d;opencv_imgcodecs409d;libpngd;libtiffd;libjpeg-turbod;libwebpd")
 	else () 
-		list(APPEND thirdparty_lib "opencv_videoio409;opencv_imgcodecs409;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
+		list(APPEND thirdparty_lib "opencv_videoio409;opencv_imgcodecs409;libpng;libtiff;libjpeg-turbo;libwebp")
 	endif()
 else ()
 	if(USE_FFMPEG)
@@ -38,9 +53,9 @@ else ()
 	endif()
 	
 	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND NOT BUILD_OPENCV)
-		list(APPEND thirdparty_lib "opencv_videoiod;opencv_imgcodecsd;libpngd;libtiffd;libjpeg-turbod;libjasperd;IlmImfd;libwebpd")
+		list(APPEND thirdparty_lib "opencv_videoiod;opencv_imgcodecsd;libpngd;libtiffd;libjpeg-turbod;libwebpd")
 	else()
-		list(APPEND thirdparty_lib "opencv_videoio;opencv_imgcodecs;libpng;libtiff;libjpeg-turbo;libjasper;IlmImf;libwebp")
+		list(APPEND thirdparty_lib "opencv_videoio;opencv_imgcodecs;libpng;libtiff;libjpeg-turbo;libwebp")
 	endif()
 endif ()
 
@@ -53,18 +68,18 @@ link_directories(
 #    ${thirdparty_lib}
 #)
 
-set(EXE_TARGET_NAME DSMVideoTest)
+set(EXE_TARGET_NAME iCVFrameWorkTest)
 if(MSVC)
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON) #open directory
 	#*************executable target*********
-	add_executable(${EXE_TARGET_NAME}  ${DSMVideoTest_execute})
+	add_executable(${EXE_TARGET_NAME}  ${iCVFrameWorkTest_execute})
 	target_link_libraries (${EXE_TARGET_NAME} ${thirdparty_lib})
-	set_property(TARGET ${EXE_TARGET_NAME} PROPERTY FOLDER "DSMVideoTest")
+	set_property(TARGET ${EXE_TARGET_NAME} PROPERTY FOLDER "iCVFrameWorkTest")
 	#new add 
 	SET_TARGET_PROPERTIES(${EXE_TARGET_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
 else()
 	#*************executable target*********
-	add_executable(${EXE_TARGET_NAME}  ${DSMVideoTest_execute})
+	add_executable(${EXE_TARGET_NAME}  ${iCVFrameWorkTest_execute})
 	target_link_libraries (${EXE_TARGET_NAME} ${thirdparty_lib})
 	if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 		add_custom_command(TARGET ${EXE_TARGET_NAME} POST_BUILD

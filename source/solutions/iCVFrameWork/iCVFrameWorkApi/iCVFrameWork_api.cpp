@@ -228,7 +228,7 @@ int32_t ICVBASEAPI iCVFrameWorkGetResVersion(const RESTYPE res_type,
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkGetEngineVerion(const char **engine_version) {
+int32_t ICVBASEAPI iCVFrameWorkGetEngineVersion(const char **engine_version) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);

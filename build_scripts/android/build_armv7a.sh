@@ -18,6 +18,8 @@ android_arm_neon=ON
 android_stl=c++_static
 #androidchain=gcc
 androidchain=clang
+build_base_utils_lib_test=OFF
+build_with_easy_profiler=OFF
 
 cd ../../
 
@@ -32,15 +34,15 @@ echo "${project_root_path}"
 cd ${build_dir}
 
 rm -rf *
-cmake	-DBUILD_BASE_UTILS_LIB_TEST=ON						\
-		-DBUILD_WITH_EASY_PROFILER=ON						\
-		-DANDROID_ABI=${android_abi}                        \
-		-DCMAKE_TOOLCHAIN_FILE=${toolchain}                 \
-		-DANDROID_PLATFORM=${android_platform}              \
-		-DCMAKE_BUILD_TYPE=${build_type}                    \
-		-DANDROID_ARM_NEON=${android_arm_neon}              \
-		-DANDROID_STL=${android_stl}                        \
-		-DANDROID_TOOLCHAIN=${androidchain}					\
+cmake	-DBUILD_BASE_UTILS_LIB_TEST=${build_base_utils_lib_test}							\
+		-DBUILD_WITH_EASY_PROFILER=${build_with_easy_profiler}								\
+		-DANDROID_ABI=${android_abi}                        								\
+		-DCMAKE_TOOLCHAIN_FILE=${toolchain}                 								\
+		-DANDROID_PLATFORM=${android_platform}              								\
+		-DCMAKE_BUILD_TYPE=${build_type}                    								\
+		-DANDROID_ARM_NEON=${android_arm_neon}              								\
+		-DANDROID_STL=${android_stl}                        								\
+		-DANDROID_TOOLCHAIN=${androidchain}													\
 		${project_root_path}
 make -j2
 

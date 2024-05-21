@@ -17,7 +17,7 @@ typedef ICV_BASE_INST iCVFW_INST;
                         func(iCVFrameWorkResourceDelete)                       \
                             func(iCVFrameWorkGetResVersion)                    \
                                 func(iCVFrameWorkGetExpiredTime)               \
-                                    func(iCVFrameWorkGetEngineVerion)          \
+                                    func(iCVFrameWorkGetEngineVersion)         \
                                         func(iCVFrameWorkResetInst)
 
 #ifdef __cplusplus
@@ -46,7 +46,8 @@ ENGINE_API(int32_t, iCVFrameWorkResourceDelete, (const RESTYPE res_type));
 ENGINE_API(int32_t, iCVFrameWorkGetExpiredTime, (const char **expired_time));
 ENGINE_API(int32_t, iCVFrameWorkGetResVersion,
            (const RESTYPE res_type, int32_t *version_num));
-ENGINE_API(int32_t, iCVFrameWorkGetEngineVerion, (const char **engine_version));
+ENGINE_API(int32_t, iCVFrameWorkGetEngineVersion,
+           (const char **engine_version));
 
 #ifdef __cplusplus
 };

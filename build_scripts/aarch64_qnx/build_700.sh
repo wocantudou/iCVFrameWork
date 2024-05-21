@@ -1,7 +1,8 @@
 set -e
 # Debug/Release
 build_type=Release
-
+build_base_utils_lib_test=OFF
+build_with_easy_profiler=OFF
 source /home/wensha2/workspace/toolchain/sv-g6sh-qnx-system-sdk/qnxsdp-env.sh
 cd ../../
 build_dir="cmake_build/build_aarch64_qnx700/"
@@ -16,8 +17,8 @@ cd ${build_dir}
 
 rm -rf *
 
-cmake	-DBUILD_BASE_UTILS_LIB_TEST=ON														\
-		-DBUILD_WITH_EASY_PROFILER=ON														\
+cmake	-DBUILD_BASE_UTILS_LIB_TEST=${build_base_utils_lib_test}							\
+		-DBUILD_WITH_EASY_PROFILER=${build_with_easy_profiler}								\
 		-DCMAKE_GENERATOR="Unix Makefiles"													\
 		-DCMAKE_TOOLCHAIN_FILE=${project_root_path}/cmake/aarch64_qnx700.toolchain.cmake	\
 		-DCMAKE_BUILD_TYPE=${build_type}													\
