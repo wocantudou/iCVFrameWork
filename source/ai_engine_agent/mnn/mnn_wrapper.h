@@ -79,11 +79,15 @@ class MNNWrapper
                         model_handle->res_buffer_len_[RES_DESC_IDX]);
         srlog_trace("{} model info: {}", static_cast<int>(res_type),
                     model_json_info);
-        std::shared_ptr<MNN::Interpreter> net =
-            std::shared_ptr<MNN::Interpreter>(
-                MNN::Interpreter::createFromBuffer(
-                    model_handle->res_buffer_[RES_MEM_IDX],
-                    model_handle->res_buffer_len_[RES_MEM_IDX]));
+        // std::shared_ptr<MNN::Interpreter> net =
+        //     std::shared_ptr<MNN::Interpreter>(
+        //         MNN::Interpreter::createFromBuffer(
+        //             model_handle->res_buffer_[RES_MEM_IDX],
+        //             model_handle->res_buffer_len_[RES_MEM_IDX]));
+        model_handle->net_ = std::shared_ptr<MNN::Interpreter>(
+            MNN::Interpreter::createFromBuffer(
+                model_handle->res_buffer_[RES_MEM_IDX],
+                model_handle->res_buffer_len_[RES_MEM_IDX]));
         ret = push_model_handle(res_type, model_handle);
         srlog_error_return(
             !ret,

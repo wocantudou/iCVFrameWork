@@ -28,7 +28,7 @@ aux_source_directory(${source_dir}/ai_engine_agent/mnn iCVFrameWork_RT_API_STATI
 aux_source_directory(. iCVFrameWork_RT_API_SHARED)
 aux_source_directory(${source_dir}/ai_engine_agent/mnn iCVFrameWork_RT_API_SHARED)
 
-unset(tmp_thirdparty_lib)
+# unset(tmp_thirdparty_lib)
 set(tmp_thirdparty_lib "")
 ModuleDependLibs(tmp_thirdparty_lib)
 
