@@ -177,7 +177,7 @@ int do_facedetect(std::shared_ptr<InstPoolClass<COMB_INST>> &inst_pool,
         } else {
             std::cout << "no face detect" << std::endl;
         }
-        if (0 == frame_idx % 1) {
+        if (0 == frame_idx % 50) {
             std::cout << input_video_path
                       << "-> progress --- frame idx : " << frame_idx
                       << std::endl;

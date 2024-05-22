@@ -20,18 +20,11 @@ typedef struct _DNNModel {
     char *res_buffer_[RES_IDX_COUNT];
     uint64_t res_buffer_len_[RES_IDX_COUNT];
     std::shared_ptr<MNN::Interpreter> net_;
-    // uint64_t input_count_;
-    // // Dims input_shape_;
-    // uint64_t output_count_;
-    // // Dims output_shape_;
-    // int32_t model_type_;
 } DNNModel;
 typedef DNNModel *DNNModelHandle;
 
 typedef struct _DNNExecute {
     MNN::Session *session_;
-    char *forward_data_ptr_;
-    int64_t forward_data_size_;
 } DNNExecute;
 typedef DNNExecute *DNNExecuteHandle;
 
@@ -79,11 +72,6 @@ class MNNWrapper
                         model_handle->res_buffer_len_[RES_DESC_IDX]);
         srlog_trace("{} model info: {}", static_cast<int>(res_type),
                     model_json_info);
-        // std::shared_ptr<MNN::Interpreter> net =
-        //     std::shared_ptr<MNN::Interpreter>(
-        //         MNN::Interpreter::createFromBuffer(
-        //             model_handle->res_buffer_[RES_MEM_IDX],
-        //             model_handle->res_buffer_len_[RES_MEM_IDX]));
         model_handle->net_ = std::shared_ptr<MNN::Interpreter>(
             MNN::Interpreter::createFromBuffer(
                 model_handle->res_buffer_[RES_MEM_IDX],
@@ -235,6 +223,7 @@ class MNNWrapper
             // get output data
             if (outputs.find(output_tensor_kv.first) == outputs.end()) {
                 DnnDataInfo tmp;
+                tmp.data_.resize(nchw_output->elementSize());
                 ::memcpy(tmp.data_.data(), nchw_output->host<float>(),
                          nchw_output->size());
 
