@@ -63,6 +63,11 @@ endif()
 
 include(${PROJECT_SOURCE_DIR}/cmake/platform.cmake)
 # *********************** FOR DEPENDS Begin ***********************
+# AI Engine
+if(USE_AI_ENGINE_MNN)
+    add_definitions(-DUSE_AI_ENGINE_MNN)
+    message(STATUS "add_definitions(-DUSE_AI_ENGINE_MNN)")
+endif()
 # DnnWrapper
 add_subdirectory(${source_dir}/submodules/DnnWrapper)
 
@@ -82,12 +87,7 @@ if(BUILD_WITH_OPENCV)
     add_subdirectory(${source_dir}/submodules/Opencv4.9.0)
 endif()
 
-# AI Engine
-if(USE_AI_ENGINE_MNN)
-    add_definitions(-DUSE_AI_ENGINE_MNN)
-    message(STATUS "add_definitions(-DUSE_AI_ENGINE_MNN)")
-    add_subdirectory(${source_dir}/submodules/MNN-2.8.1)
-endif()
+
 # *********************** FOR DEPENDS End ***********************
 
 add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)

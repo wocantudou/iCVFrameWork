@@ -52,8 +52,8 @@ include_directories(${source_dir}/submodules/iCVBaseUtilsLib/include/utils)
 include_directories(
                 ${source_dir}/submodules/DnnWrapper/source/include
                 ${source_dir}/submodules/DnnWrapper/source/submodules/IPEDU/source/include
+                ${source_dir}/submodules/DnnWrapper/source/submodules/AI_ENGINE/MNN-2.8.1/include
                 ${source_dir}/ai_engine_agent
-                ${source_dir}/submodules/MNN-2.8.1/include
                 )
 
 include_directories(
