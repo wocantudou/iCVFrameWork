@@ -7,6 +7,4 @@
 [submodule "source/submodules/Opencv4.9.0"]
 	path = source/submodules/Opencv4.9.0
 	url = https://github.com/wocantudou/Opencv4.9.0.git
-[submodule "source/submodules/MNN-2.8.1"]
-	path = source/submodules/MNN-2.8.1
-	url = https://github.com/wocantudou/MNN-2.8.1.git
+	
