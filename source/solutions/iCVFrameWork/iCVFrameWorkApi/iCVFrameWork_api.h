@@ -1,6 +1,6 @@
 #pragma once
 #include "iCVBase_errcode.h"
-#include "iCVFace_types.h"
+#include "iCVFrameWork_types.h"
 
 #if defined(_MSC_VER) /* Microsoft Visual C++ */
 #pragma pack(push, 8)

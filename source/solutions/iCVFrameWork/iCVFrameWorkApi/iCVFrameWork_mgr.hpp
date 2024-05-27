@@ -6,13 +6,12 @@ class iCVFrameWorkInstMgr : public iCVBaseInstMgr {
   protected:
     int32_t res_inst_register() {
         int32_t ret = ICVBASE_NO_ERROR;
-        res_info_umap_.clear();
+        res_info_map_.clear();
         iCVBaseResInfo res_info;
         // Unit FaceDetect{
         res_info.res_path =
             G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_FaceDetectResPath();
-        res_info_umap_.insert(
-            std::make_pair(RESTYPE_FACE_DETECT_CPU, res_info));
+        res_info_map_.insert(std::make_pair(RESTYPE_FACE_DETECT_CPU, res_info));
         factory_.Register(RESTYPE_FACE_DETECT_CPU, creatorFaceDetectInst);
         // }
         // New Unit Add ... TODO {}

@@ -53,12 +53,12 @@ class iCVBaseInstMgr {
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
-            (0 != res_info_umap_.count(res_type) ||
+            (0 != res_info_map_.count(res_type) ||
              0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("setup error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
             ICVBASE_REGISTER_ERROR);
-        iCVBaseResInfo res_info = res_info_umap_.at(res_type);
+        iCVBaseResInfo res_info = res_info_map_.at(res_type);
         std::string real_res_path;
         if (NULL == res_path) {
             real_res_path = res_info.res_path;
@@ -81,7 +81,7 @@ class iCVBaseInstMgr {
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
-            (0 != res_info_umap_.count(res_type) ||
+            (0 != res_info_map_.count(res_type) ||
              0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("setup error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
@@ -102,7 +102,7 @@ class iCVBaseInstMgr {
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
-            (0 != res_info_umap_.count(res_type) ||
+            (0 != res_info_map_.count(res_type) ||
              0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("shutdown error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
@@ -122,7 +122,7 @@ class iCVBaseInstMgr {
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
         srlog_error_return(
-            (0 != res_info_umap_.count(res_type) ||
+            (0 != res_info_map_.count(res_type) ||
              0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)),
             ("create_inst error, ResType : {} not registered!",
              static_cast<int32_t>(res_type)),
@@ -265,7 +265,7 @@ class iCVBaseInstMgr {
   private:
     void reset() {
         inst_umap_.clear();
-        res_info_umap_.clear();
+        res_info_map_.clear();
         inst_id_ = INST_ID_INITIAL;
         cfg_path_ = "";
     }
@@ -277,5 +277,5 @@ class iCVBaseInstMgr {
     FactoryClass<iCVBaseDef> factory_;
     std::mutex mtx_;
     std::unordered_map<long, std::unique_ptr<iCVBaseDef>> inst_umap_;
-    std::unordered_map<RESTYPE, iCVBaseResInfo> res_info_umap_;
+    std::map<RESTYPE, iCVBaseResInfo> res_info_map_;
 };

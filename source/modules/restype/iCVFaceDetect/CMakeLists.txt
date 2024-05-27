@@ -3,6 +3,7 @@ include(${PROJECT_SOURCE_DIR}/cmake/depends.cmake)
 
 include_directories(
 		./
+		${PROJECT_SOURCE_DIR}/source/solutions/iCVFrameWork/iCVFrameWorkApi
 		)
 
 message(STATUS "iCVFaceDetect hhhhh = ${source_dir}")

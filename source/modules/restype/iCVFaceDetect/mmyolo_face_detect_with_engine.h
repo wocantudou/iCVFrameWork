@@ -3,7 +3,7 @@
 
 #include "iCVBase_def.h"
 #include "iCVFaceDetect_cfg.h"
-#include "iCVFace_types.h"
+#include "iCVFrameWork_types.h"
 #include <opencv2/opencv.hpp>
 
 typedef struct _ResizedPaddingInfo {

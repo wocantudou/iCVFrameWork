@@ -1,4 +1,5 @@
 set(CMAKE_SYSTEM_NAME QNX)
+set(CMAKE_SYSTEM_PROCESSOR aarch64)
 set(QNX ON)
 #set(arch ntox86_64)
 #set(QNX_PROCESSOR x86_64)
@@ -11,19 +12,22 @@ set(AARCH64 ON)
 
 set(CPP11  "-std=c++11")
 add_definitions(-D__QNX__)
-add_definitions(-D__qnx__)
 add_definitions(-D_QNX_SOURCE)
+add_definitions(-D__unix__)
+add_definitions(-D__qnx700__)
+
 
 set(CMAKE_C_COMPILER $ENV{QNX_HOST}/usr/bin/${arch}-gcc)
 set(CMAKE_C_COMPILER_TARGET ${arch})
+
 set(CMAKE_CXX_COMPILER $ENV{QNX_HOST}/usr/bin/${arch}-g++)
 set(CMAKE_CXX_COMPILER_TARGET ${arch})
+
+
 set (CMAKE_STRIP $ENV{QNX_HOST}/usr/bin/${arch}-strip CACHE FILEPATH "Strip")
 set (CMAKE_NM  $ENV{QNX_HOST}/usr/bin/${arch}-gcc-nm CACHE FILEPATH "NM")
 set (CMAKE_RANLIB  $ENV{QNX_HOST}/usr/bin/${arch}-gcc-ranlib CACHE FILEPATH "Ranlib")
 set (CMAKE_AR $ENV{QNX_HOST}/usr/bin/${arch}-gcc-ar CACHE FILEPATH "Archiver")
-
-set(XLITE_HEXAGON_THIRDPARTY_PATH	"/data/boshao/workspace/third_party/" CACHE STRING "XLITE_HEXAGON_THIRDPARTY_PATH" FORCE)
 
 message(STATUS "---------CMAKE_STRIP = ${CMAKE_STRIP}")
 message(STATUS "---------CMAKE_NM = ${CMAKE_NM}")
@@ -46,6 +50,7 @@ message(STATUS "---------QNX_TARGET = $ENV{QNX_TARGET}")
 message(STATUS "---------INCLUDE_DIR_QNX = $ENV{QNX_TARGET}/usr/include")
 include_directories($ENV{QNX_TARGET}/usr/include)
 
+
 file(GLOB_RECURSE libgcc_a 
   "$ENV{QNX_HOST}/usr/lib/gcc/${QNX_PROCESSOR}*/*/pic/libgcc.a")
 set(CMAKE_C_STANDARD_LIBRARIES_INIT
@@ -58,7 +63,6 @@ set(CMAKE_HAVE_THREADS_LIBRARY 1)
 set(CMAKE_USE_WIN32_THREADS_INIT 0)
 set(CMAKE_USE_PTHREADS_INIT 1)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-
 
 set(output_dir  "${PROJECT_SOURCE_DIR}/output")
 message(STATUS "QNX_QUALCOMM PLATFORM")

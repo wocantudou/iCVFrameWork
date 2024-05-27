@@ -305,10 +305,8 @@ class MNNWrapper
     bool inited_;
 
   public:
-    static const std::unordered_map<RESTYPE, const std::string>
-        restype_name_map_;
-    static const std::unordered_map<RESTYPE, std::vector<RESTYPE>>
-        modtype_restypes_map_;
+    static const std::map<RESTYPE, const std::string> restype_name_map_;
+    static const std::map<RESTYPE, std::vector<RESTYPE>> modtype_restypes_map_;
 };
 
 } // namespace DNN_WRAPPER
