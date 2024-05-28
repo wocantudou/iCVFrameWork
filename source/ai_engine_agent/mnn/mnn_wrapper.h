@@ -31,28 +31,28 @@ typedef DNNExecute *DNNExecuteHandle;
 class MNNWrapper
     : public DNNWrapper<RESTYPE, DNNModelHandle, DNNExecuteHandle> {
   public:
-    explicit MNNWrapper() : inited_(false) {}
-    ~MNNWrapper() { inited_ = false; }
+    explicit MNNWrapper() {}
+    ~MNNWrapper() {}
 
   public:
     int32_t init(const char *workdir = NULL) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(!inited_, ICVBASE_INIT_ERROR);
-        inited_ = true;
+        srlog_verify_init(!is_init_, ICVBASE_INIT_ERROR);
+        is_init_ = true;
         return ret;
     }
     int32_t fini() {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        inited_ = false;
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
+        is_init_ = false;
         return ret;
     }
     int32_t add_resource(const RESTYPE res_type, const std::string &res_path) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         std::string key = "iflytek_cv3";
         ret = add_res_from_file(res_type, res_path, key.c_str());
         srlog_error_return(!ret,
@@ -88,7 +88,7 @@ class MNNWrapper
                          const int32_t len) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         std::string key = "iflytek_cv3";
         ret = add_res_from_mem(res_type, data, len, key.c_str());
         srlog_error_return(
@@ -123,7 +123,7 @@ class MNNWrapper
     int32_t del_resource(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle;
         ret = pull_model_handle(res_type, model_handle);
         srlog_error_return(
@@ -146,7 +146,7 @@ class MNNWrapper
     int32_t data_io_prepares(const RESTYPE res_type, DnnDataIO &io_inst) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         io_inst.inputs_.clear();
         io_inst.outputs_.clear();
 
@@ -195,7 +195,7 @@ class MNNWrapper
     int32_t inference(const RESTYPE res_type, DnnDataIO &io_inst) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         std::shared_ptr<DnnInst> inst;
         ret = pop_instpool_map_inst_by_rt(res_type, inst);
@@ -258,7 +258,7 @@ class MNNWrapper
     int32_t create_inst(const RESTYPE res_type, bool batch_mode = false) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         DNNExecuteHandle execute_handle = new (std::nothrow) DNNExecute();
         srlog_verify_ptr(execute_handle, ICVBASE_MEMORY_ERROR);
@@ -285,7 +285,7 @@ class MNNWrapper
     int32_t destroy_inst(const RESTYPE res_type) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
-        srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
+        srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         DNNExecuteHandle execute_handle;
         ret = destroy_instpool_map_inst_by_rt(res_type, execute_handle);
@@ -304,9 +304,6 @@ class MNNWrapper
         }
         return ret;
     }
-
-  private:
-    bool inited_;
 
   public:
     static const std::map<RESTYPE, const std::string> restype_name_map_;
