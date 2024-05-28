@@ -189,11 +189,10 @@ class MNNWrapper
                            ("pop_instpool_map_inst_by_rt( {} ) error!",
                             static_cast<int>(res_type)),
                            ret);
-
+        // set input
         auto input_tensors = model_handle->net_->getSessionInputAll(
             inst->execute_handle_->session_);
         for (auto &input_kv : inputs) {
-            // set input
             auto nchw_input = std::make_shared<MNN::Tensor>(
                 input_tensors.at(input_kv.first), MNN::Tensor::CAFFE);
             auto nchw_input_host = nchw_input->host<float>();

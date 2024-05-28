@@ -43,10 +43,10 @@ class iCVBaseEngine {
     int32_t preprocess(const RESTYPE res_type, const cv::Mat &input_mat,
                        void *target_data, void *reserverd = NULL) {
         int32_t ret = ICVBASE_NO_ERROR;
-        // srlog_error_return(
-        //     (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
-        //     ("preprocess( {} ) failed.", static_cast<int>(res_type)),
-        //     ICVBASE_INPUT_ERROR);
+        srlog_error_return(
+            (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
+            ("preprocess( {} ) failed.", static_cast<int>(res_type)),
+            ICVBASE_INPUT_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_ENGINE");
         std::string TAG = DnnWrapperInst()->restype_name_map_.at(res_type) +
                           "_" + __FUNCTION__;
@@ -57,10 +57,10 @@ class iCVBaseEngine {
 
     int32_t forward(const RESTYPE res_type, void *reserverd = NULL) {
         int32_t ret = ICVBASE_NO_ERROR;
-        // srlog_error_return(
-        //     (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
-        //     ("forward( {} ) failed.", static_cast<int>(res_type)),
-        //     ICVBASE_INPUT_ERROR);
+        srlog_error_return(
+            (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
+            ("forward( {} ) failed.", static_cast<int>(res_type)),
+            ICVBASE_INPUT_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_ENGINE");
         std::string TAG = DnnWrapperInst()->restype_name_map_.at(res_type) +
                           "_" + __FUNCTION__;
@@ -72,10 +72,10 @@ class iCVBaseEngine {
     int32_t postprocess(const RESTYPE res_type, void *target_data,
                         void *reserverd = NULL) {
         int32_t ret = ICVBASE_NO_ERROR;
-        // srlog_error_return(
-        //     (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
-        //     ("postprocess( {} ) failed.", static_cast<int>(res_type)),
-        //     ICVBASE_INPUT_ERROR);
+        srlog_error_return(
+            (0 != DnnWrapperInst()->restype_name_map_.count(res_type)),
+            ("postprocess( {} ) failed.", static_cast<int>(res_type)),
+            ICVBASE_INPUT_ERROR);
         srlog_perf(LOG_PROF_TAG, "BASE_ENGINE");
         std::string TAG = DnnWrapperInst()->restype_name_map_.at(res_type) +
                           "_" + __FUNCTION__;
