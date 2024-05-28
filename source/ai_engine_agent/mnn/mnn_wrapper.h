@@ -143,12 +143,13 @@ class MNNWrapper
         return ret;
     }
 
-    int32_t prepare_inputs(const RESTYPE res_type,
-                           std::map<std::string, DnnDataInfo> &inputs) {
+    int32_t data_io_prepares(const RESTYPE res_type, DnnDataIOInst &io_inst) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
-        inputs.clear();
+        io_inst.inputs_.clear();
+        io_inst.outputs_.clear();
+
         DNNModelHandle model_handle = dnn_res_map_.at(res_type)->model_handle_;
         std::shared_ptr<DnnInst> inst;
         ret = pop_instpool_map_inst_by_rt(res_type, inst);
@@ -156,6 +157,7 @@ class MNNWrapper
                            ("pop_instpool_map_inst_by_rt( {} ) error!",
                             static_cast<int>(res_type)),
                            ret);
+        // input prepares{
         auto input_tensors = model_handle->net_->getSessionInputAll(
             inst->execute_handle_->session_);
         for (auto &input_tensor_kv : input_tensors) {
@@ -165,8 +167,24 @@ class MNNWrapper
                 tmp.dims_.d[i] = input_tensor_kv.second->shape()[i];
             }
             tmp.data_.resize(tmp.dims_.count());
-            inputs.insert(std::make_pair(input_tensor_kv.first, tmp));
+            io_inst.inputs_.insert(std::make_pair(input_tensor_kv.first, tmp));
         }
+        // input prepares}
+
+        // output prepares{
+        auto output_tensors = model_handle->net_->getSessionOutputAll(
+            inst->execute_handle_->session_);
+        for (auto &output_tensor_kv : output_tensors) {
+            DnnDataInfo tmp;
+            tmp.dims_.nbDims = output_tensor_kv.second->dimensions();
+            for (int i = 0; i < output_tensor_kv.second->dimensions(); i++) {
+                tmp.dims_.d[i] = output_tensor_kv.second->shape()[i];
+            }
+            tmp.data_.resize(tmp.dims_.count());
+            io_inst.outputs_.insert(
+                std::make_pair(output_tensor_kv.first, tmp));
+        }
+        // output prepares}
         ret = push_instpool_map_inst_by_rt(res_type, inst);
         srlog_error_return(!ret,
                            ("push_instpool_map_inst_by_rt( {} ) error!",
@@ -174,11 +192,7 @@ class MNNWrapper
                            ret);
         return ret;
     }
-
-    int32_t inference(const RESTYPE res_type,
-                      const std::map<std::string, DnnDataInfo> &inputs,
-                      std::map<std::string, DnnDataInfo> &outputs,
-                      int32_t batch_num = 1) {
+    int32_t inference(const RESTYPE res_type, DnnDataIOInst &io_inst) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
@@ -192,7 +206,7 @@ class MNNWrapper
         // set input
         auto input_tensors = model_handle->net_->getSessionInputAll(
             inst->execute_handle_->session_);
-        for (auto &input_kv : inputs) {
+        for (auto &input_kv : io_inst.inputs_) {
             auto nchw_input = std::make_shared<MNN::Tensor>(
                 input_tensors.at(input_kv.first), MNN::Tensor::CAFFE);
             auto nchw_input_host = nchw_input->host<float>();
@@ -220,24 +234,15 @@ class MNNWrapper
                 output_tensor_kv.second, MNN::Tensor::CAFFE);
             output_tensor_kv.second->copyToHostTensor(nchw_output.get());
             // get output data
-            if (outputs.find(output_tensor_kv.first) == outputs.end()) {
-                DnnDataInfo tmp;
-                tmp.data_.resize(nchw_output->elementSize());
-                ::memcpy(tmp.data_.data(), nchw_output->host<float>(),
-                         nchw_output->size());
-
-                outputs.insert(std::make_pair(output_tensor_kv.first, tmp));
-            } else {
-                outputs.at(output_tensor_kv.first)
-                    .data_.resize(nchw_output->elementSize());
-                ::memcpy(outputs.at(output_tensor_kv.first).data_.data(),
-                         nchw_output->host<float>(), nchw_output->size());
-            }
+            io_inst.outputs_.at(output_tensor_kv.first)
+                .data_.resize(nchw_output->elementSize());
+            ::memcpy(io_inst.outputs_.at(output_tensor_kv.first).data_.data(),
+                     nchw_output->host<float>(), nchw_output->size());
             // get output shape
-            outputs.at(output_tensor_kv.first).dims_.nbDims =
+            io_inst.outputs_.at(output_tensor_kv.first).dims_.nbDims =
                 nchw_output->dimensions();
             for (int i = 0; i < nchw_output->dimensions(); i++) {
-                outputs.at(output_tensor_kv.first).dims_.d[i] =
+                io_inst.outputs_.at(output_tensor_kv.first).dims_.d[i] =
                     nchw_output->shape()[i];
             }
         }
