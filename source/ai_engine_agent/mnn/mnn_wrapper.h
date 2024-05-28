@@ -143,7 +143,7 @@ class MNNWrapper
         return ret;
     }
 
-    int32_t data_io_prepares(const RESTYPE res_type, DnnDataIOInst &io_inst) {
+    int32_t data_io_prepares(const RESTYPE res_type, DnnDataIO &io_inst) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
@@ -192,7 +192,7 @@ class MNNWrapper
                            ret);
         return ret;
     }
-    int32_t inference(const RESTYPE res_type, DnnDataIOInst &io_inst) {
+    int32_t inference(const RESTYPE res_type, DnnDataIO &io_inst) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
@@ -255,7 +255,7 @@ class MNNWrapper
         return ret;
     }
 
-    int32_t create_inst(const RESTYPE res_type) {
+    int32_t create_inst(const RESTYPE res_type, bool batch_mode = false) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);

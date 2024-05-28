@@ -152,8 +152,8 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
                                                     void *reserved) {
     int ret = ICVBASE_NO_ERROR;
     ICVFaces &face_targets = *(ICVFaces *)target_data;
-    int model_input_h = io_inst_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
-    int model_input_w = io_inst_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
+    int model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
+    int model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
 
     // 1.preprocess
     cv::Mat resize_mat;
@@ -173,7 +173,7 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
 
     ret = DNNCVLIB::sub_mean_and_divide_std(
         DNNCVLIB::BGRBGRBGRTOBBBGGGRRR, resize_mat,
-        io_inst_.inputs_.at(INPUT_NODE_NAME).data_.data(), mean_data.data(),
+        data_io_.inputs_.at(INPUT_NODE_NAME).data_.data(), mean_data.data(),
         std_data.data());
     srlog_error_return((!ret), ("sub_mean_and_divide_std inlegal !"), ret);
 
@@ -190,7 +190,7 @@ int MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
         ICVBASE_SUPPORT_ERROR);
 
     std::call_once(once_flag_, [this, res_type, &ret]() {
-        ret = DnnWrapperInst()->data_io_prepares(res_type, io_inst_);
+        ret = DnnWrapperInst()->data_io_prepares(res_type, data_io_);
     });
     srlog_error_return((!ret),
                        ("DnnWrapperInst | prepare_inputs( {} ) error",
@@ -227,14 +227,14 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     ICVFaces &face_targets = *(ICVFaces *)target_data;
 
     float detect_thre = param_inst_.get_iCVFaceDetect_detect_thres();
-    int model_input_h = io_inst_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
-    int model_input_w = io_inst_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
+    int model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
+    int model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
 
     std::vector<cv::Rect2f> det_rects;
     std::vector<float> scores;
     std::vector<std::vector<BoxInfo>> decode_results;
     decode_results.resize(NUM_CLASS);
-    for (auto &output : io_inst_.outputs_) {
+    for (auto &output : data_io_.outputs_) {
         const std::string output_name = output.first;
         int patch = model_input_h * model_input_w /
                     (fd_heads_strides_.at(output_name) *

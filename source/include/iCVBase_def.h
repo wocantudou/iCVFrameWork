@@ -36,7 +36,7 @@ class iCVBaseEngine {
                                      void *reserved) = 0;
     int32_t forward_impl(const RESTYPE res_type, void *reserved) {
         int32_t ret = ICVBASE_NO_ERROR;
-        ret = DnnWrapperInst()->inference(res_type, io_inst_);
+        ret = DnnWrapperInst()->inference(res_type, data_io_);
         return ret;
     }
 
@@ -86,7 +86,7 @@ class iCVBaseEngine {
 
   protected:
     std::once_flag once_flag_;
-    DNN_WRAPPER::DnnDataIOInst io_inst_;
+    DNN_WRAPPER::DnnDataIO data_io_;
 };
 
 class iCVBaseDef {
