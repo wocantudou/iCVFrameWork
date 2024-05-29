@@ -138,11 +138,17 @@ class iCVBaseInstMgr {
         inst->res_type_ = res_type;
         ret = inst->init(cfg_path_.c_str());
         srlog_error_return(!ret, ("inst->init( {} ) failed.", cfg_path_), ret);
-
+        // TODO{
+        DNN_WRAPPER::DnnScheduleConfig scfg;
+        scfg.hardware_type_ = DNN_WRAPPER::DNNHardWareType::DNN_HARDWARE_CPU;
+        scfg.num_thread_ = 1;
+        scfg.max_batch_size_ = 1;
+        scfg.device_id = 0;
+        // TODO}
         if (0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             for (const auto &each_res :
                  DnnWrapperInst()->modtype_restypes_map_.at(res_type)) {
-                ret = DnnWrapperInst()->create_inst(each_res);
+                ret = DnnWrapperInst()->create_inst(each_res, scfg);
                 srlog_error_return(
                     !ret,
                     ("DnnWrapperInst()->create_inst( {} ) failed.",
@@ -150,7 +156,7 @@ class iCVBaseInstMgr {
                     ret);
             }
         } else {
-            ret = DnnWrapperInst()->create_inst(res_type);
+            ret = DnnWrapperInst()->create_inst(res_type, scfg);
             srlog_error_return(!ret,
                                ("DnnWrapperInst()->create_inst( {} ) failed.",
                                 static_cast<int>(res_type)),

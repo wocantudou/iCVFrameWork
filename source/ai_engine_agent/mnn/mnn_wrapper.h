@@ -256,7 +256,8 @@ class MNNWrapper
         return ret;
     }
 
-    int32_t create_inst(const RESTYPE res_type, bool batch_mode = false) {
+    int32_t create_inst(const RESTYPE res_type, DnnScheduleConfig scfg,
+                        bool batch_mode = false) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
