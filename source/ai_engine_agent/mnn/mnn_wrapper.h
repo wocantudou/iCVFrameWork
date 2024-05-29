@@ -192,7 +192,8 @@ class MNNWrapper
                            ret);
         return ret;
     }
-    int32_t inference(const RESTYPE res_type, DnnDataIO &io_inst) {
+    int32_t inference(const RESTYPE res_type, DnnDataIO &io_inst,
+                      bool batch_mode = false) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "MNNWrapper");
         srlog_verify_init(is_init_, ICVBASE_INIT_ERROR);
@@ -274,7 +275,8 @@ class MNNWrapper
             MNN::BackendConfig::PrecisionMode::Precision_Normal; // 精度
         config.backendConfig = &backendConfig;
         execute_handle->session_ = model_handle->net_->createSession(config);
-        ret = create_instpool_map_inst_by_rt(res_type, execute_handle);
+        ret = create_instpool_map_inst_by_rt(res_type, execute_handle,
+                                             batch_mode);
         srlog_error_return(!ret,
                            ("create_instpool_map_inst_by_rt( {} ) error!",
                             static_cast<int>(res_type)),
