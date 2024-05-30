@@ -12,6 +12,7 @@ class iCVBaseInstMgr {
   public:
     typedef struct _iCVBaseResInfo {
         std::string res_path;
+        std::string res_name;
     } iCVBaseResInfo;
 
   public:

@@ -11,6 +11,7 @@ class iCVFrameWorkInstMgr : public iCVBaseInstMgr {
         // Unit FaceDetect{
         res_info.res_path =
             G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_FaceDetectResPath();
+        res_info.res_name = NAME_STR(RESTYPE_FACE_DETECT_CPU);
         res_info_map_.insert(std::make_pair(RESTYPE_FACE_DETECT_CPU, res_info));
         factory_.Register(RESTYPE_FACE_DETECT_CPU, creatorFaceDetectInst);
         // }
