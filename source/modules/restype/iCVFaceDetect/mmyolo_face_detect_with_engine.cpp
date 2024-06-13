@@ -27,21 +27,21 @@
 #define OUTPUT_NODE_NAME_TWO ("738")
 #define OUTPUT_NODE_NAME_THREE ("746")
 
-const std::map<const std::string, const int>
+const std::map<const std::string, const int32_t>
     MmyoloFaceDetectWithEngine::fd_heads_strides_{{OUTPUT_NODE_NAME_ONE, 8},
                                                   {OUTPUT_NODE_NAME_TWO, 16},
                                                   {OUTPUT_NODE_NAME_THREE, 32}};
 
-int MmyoloFaceDetectWithEngine::reset() {
-    int ret = ICVBASE_NO_ERROR;
+int32_t MmyoloFaceDetectWithEngine::reset() {
+    int32_t ret = ICVBASE_NO_ERROR;
     return ret;
 }
 
-int MmyoloFaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
-                                                  int model_input_w,
-                                                  int model_input_h,
-                                                  cv::Mat &resize_mat) {
-    int ret = ICVBASE_NO_ERROR;
+int32_t MmyoloFaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
+                                                      int32_t model_input_w,
+                                                      int32_t model_input_h,
+                                                      cv::Mat &resize_mat) {
+    int32_t ret = ICVBASE_NO_ERROR;
     int32_t src_height = img_mat.rows;
     int32_t src_width = img_mat.cols;
     int32_t max_src_size = (std::max)(src_width, src_height);
@@ -50,13 +50,13 @@ int MmyoloFaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
     if (scale_ratio != 1) {
         if (scale_ratio < 1) {
             cv::resize(img_mat, resize_mat,
-                       cv::Size(int(scale_ratio * src_width),
-                                int(scale_ratio * src_height)),
+                       cv::Size(int32_t(scale_ratio * src_width),
+                                int32_t(scale_ratio * src_height)),
                        0, 0, 3);
         } else {
             cv::resize(img_mat, resize_mat,
-                       cv::Size(int(scale_ratio * src_width),
-                                int(scale_ratio * src_height)),
+                       cv::Size(int32_t(scale_ratio * src_width),
+                                int32_t(scale_ratio * src_height)),
                        0, 0, 1);
         }
     } else {
@@ -65,18 +65,18 @@ int MmyoloFaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
     return ret;
 }
 
-int MmyoloFaceDetectWithEngine::letterbox(
-    const cv::Mat &src_img, int img_size_w, int img_size_h, cv::Mat &dst_img,
-    ResizedPaddingInfo &resize_padding_info) {
-    int ret = ICVBASE_NO_ERROR;
+int32_t MmyoloFaceDetectWithEngine::letterbox(
+    const cv::Mat &src_img, int32_t img_size_w, int32_t img_size_h,
+    cv::Mat &dst_img, ResizedPaddingInfo &resize_padding_info) {
+    int32_t ret = ICVBASE_NO_ERROR;
     int32_t src_height = src_img.rows;
     int32_t src_width = src_img.cols;
 
     float scale_ratio = (std::min)(float(img_size_h) / src_height,
                                    float(img_size_w) / src_width);
     scale_ratio = (std::min)(scale_ratio, 1.0f);
-    int new_pad_w = int(round(scale_ratio * src_width));
-    int new_pad_h = int(round(scale_ratio * src_height));
+    int32_t new_pad_w = int32_t(round(scale_ratio * src_width));
+    int32_t new_pad_h = int32_t(round(scale_ratio * src_height));
     float dw = img_size_w - new_pad_w;
     float dh = img_size_h - new_pad_h;
     if (new_pad_h != src_height || new_pad_w != src_width) {
@@ -112,10 +112,10 @@ float MmyoloFaceDetectWithEngine::clip_coord(float cord,
     return (std::min)((std::max)(0.f, cord), static_cast<float>(img_size - 1));
 }
 
-int MmyoloFaceDetectWithEngine::rtm_preprocess(
-    const cv::Mat &img_mat, int model_input_w, int model_input_h,
+int32_t MmyoloFaceDetectWithEngine::rtm_preprocess(
+    const cv::Mat &img_mat, int32_t model_input_w, int32_t model_input_h,
     cv::Mat &resize_mat, ResizedPaddingInfo &resize_padding_info) {
-    int ret = ICVBASE_NO_ERROR;
+    int32_t ret = ICVBASE_NO_ERROR;
     resize_mat.release();
     srlog_error_return(
         (!img_mat.empty()),
@@ -150,10 +150,10 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
                                                     const cv::Mat &input_mat,
                                                     void *target_data,
                                                     void *reserved) {
-    int ret = ICVBASE_NO_ERROR;
+    int32_t ret = ICVBASE_NO_ERROR;
     ICVFaces &face_targets = *(ICVFaces *)target_data;
-    int model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
-    int model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
+    int32_t model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
+    int32_t model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
 
     // 1.preprocess
     cv::Mat resize_mat;
@@ -180,13 +180,13 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
     return ret;
 }
 
-int MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
-                                            const cv::Mat &img,
-                                            ICVFaces &face_targets) {
-    int ret = ICVBASE_NO_ERROR;
+int32_t MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
+                                                const cv::Mat &img,
+                                                ICVFaces &face_targets) {
+    int32_t ret = ICVBASE_NO_ERROR;
     srlog_error_return(
         ((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT)),
-        ("detect_face:%d, inlegal !", static_cast<int>(res_type)),
+        ("detect_face:%d, inlegal !", static_cast<int32_t>(res_type)),
         ICVBASE_SUPPORT_ERROR);
 
     std::call_once(once_flag_, [this, res_type, &ret]() {
@@ -194,7 +194,7 @@ int MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
     });
     srlog_error_return((!ret),
                        ("DnnWrapperInst | prepare_inputs( {} ) error",
-                        static_cast<int>(res_type)),
+                        static_cast<int32_t>(res_type)),
                        ret);
 
     ori_img_ = img;
@@ -222,13 +222,13 @@ int MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
 int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
                                                      void *target_data,
                                                      void *reserved) {
-    int ret = ICVBASE_NO_ERROR;
+    int32_t ret = ICVBASE_NO_ERROR;
 
     ICVFaces &face_targets = *(ICVFaces *)target_data;
 
     float detect_thre = param_inst_.get_iCVFaceDetect_detect_thres();
-    int model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
-    int model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
+    int32_t model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
+    int32_t model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
 
     std::vector<cv::Rect2f> det_rects;
     std::vector<float> scores;
@@ -236,13 +236,13 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     decode_results.resize(NUM_CLASS);
     for (auto &output : data_io_.outputs_) {
         const std::string output_name = output.first;
-        int patch = model_input_h * model_input_w /
-                    (fd_heads_strides_.at(output_name) *
-                     fd_heads_strides_.at(output_name));
+        int32_t patch = model_input_h * model_input_w /
+                        (fd_heads_strides_.at(output_name) *
+                         fd_heads_strides_.at(output_name));
         std::vector<ClsPred> cls_pred_vec;
         std::vector<MmyoloDisPred> dis_pred_vec;
         float *result = output.second.data_.data();
-        for (int i = 0; i < patch; ++i) {
+        for (int32_t i = 0; i < patch; ++i) {
             ClsPred cls_pred;
             memcpy((void *)cls_pred.cls_preds, (void *)result,
                    NUM_CLASS * sizeof(float));
@@ -274,7 +274,7 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     }
 
     float iou_thres = param_inst_.get_iCVFaceDetect_nms_iou_thres();
-    int max_init_nms_cnt =
+    int32_t max_init_nms_cnt =
         param_inst_.get_iCVFaceDetect_max_init_nms_rect_cnt();
     std::vector<NMSOutData> nms_res;
     ret = nms2(det_rects, scores, iou_thres, max_init_nms_cnt, nms_res);
@@ -284,8 +284,8 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     face_targets.face_num = MAX_DETECT_OBJECT_NUM > nms_res.size()
                                 ? nms_res.size()
                                 : MAX_DETECT_OBJECT_NUM;
-    int is_face_index = 0;
-    for (int i = 0; i < face_targets.face_num; ++i) {
+    int32_t is_face_index = 0;
+    for (int32_t i = 0; i < face_targets.face_num; ++i) {
         const float score = nms_res[i].score;
         float xmin, ymin, xmax, ymax;
         xmin = (nms_res[i].rect.x) * ori_img_.cols;
@@ -295,21 +295,21 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
         if (xmax < COORD_BOUND || ymax < COORD_BOUND) {
             srlog_info("invalid face : rect = [%d, %d, %d, %d], score = %f "
                        "abondon ...\n",
-                       int(xmin), int(ymin), int(xmax - xmin), int(ymax - ymin),
-                       score);
+                       int32_t(xmin), int32_t(ymin), int32_t(xmax - xmin),
+                       int32_t(ymax - ymin), score);
             continue;
         }
         // abandon the small face
-        int min_face_size_h_thres =
+        int32_t min_face_size_h_thres =
             param_inst_.get_iCVFaceDetect_min_face_size_h_thres();
-        int min_face_size_w_thres =
+        int32_t min_face_size_w_thres =
             param_inst_.get_iCVFaceDetect_min_face_size_w_thres();
         if (((xmax - xmin) <= min_face_size_w_thres) ||
             ((ymax - ymin) <= min_face_size_h_thres)) {
             srlog_info("small face : rect = [%d, %d, %d, %d], score = %f "
                        "abondon ...\n",
-                       int(xmin), int(ymin), int(xmax - xmin), int(ymax - ymin),
-                       score);
+                       int32_t(xmin), int32_t(ymin), int32_t(xmax - xmin),
+                       int32_t(ymax - ymin), score);
             continue;
         }
 
@@ -333,8 +333,9 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     return ret;
 }
 
-int MmyoloFaceDetectWithEngine::set_param(const char *para, const char *value) {
-    int ret = ICVBASE_NO_ERROR;
+int32_t MmyoloFaceDetectWithEngine::set_param(const char *para,
+                                              const char *value) {
+    int32_t ret = ICVBASE_NO_ERROR;
     bool bflag = param_inst_.setConfigValue(para, value);
     if (bflag) {
         return ICVBASE_NO_ERROR;
@@ -353,9 +354,9 @@ int MmyoloFaceDetectWithEngine::set_param(const char *para, const char *value) {
     return ret;
 }
 
-int MmyoloFaceDetectWithEngine::get_param(const char *para, char *value,
-                                          int32_t len) {
-    int ret = ICVBASE_NO_ERROR;
+int32_t MmyoloFaceDetectWithEngine::get_param(const char *para, char *value,
+                                              int32_t len) {
+    int32_t ret = ICVBASE_NO_ERROR;
     std::string str_val;
     bool bflag = param_inst_.getConfigValue(para, str_val);
     if (bflag) {

@@ -22,23 +22,24 @@ class MmyoloFaceDetectWithEngine : public iCVBaseEngine {
     ~MmyoloFaceDetectWithEngine() {}
 
   private:
-    int letterbox(const cv::Mat &src_img, int img_size_w, int img_size_h,
-                  cv::Mat &dst1, ResizedPaddingInfo &resize_padding_info);
-    int load_image_static(const cv::Mat &img_mat, int model_input_w,
-                          int model_input_h, cv::Mat &resize_mat);
+    int32_t letterbox(const cv::Mat &src_img, int32_t img_size_w,
+                      int32_t img_size_h, cv::Mat &dst1,
+                      ResizedPaddingInfo &resize_padding_info);
+    int32_t load_image_static(const cv::Mat &img_mat, int32_t model_input_w,
+                              int32_t model_input_h, cv::Mat &resize_mat);
     float clip_coord(float cord, const int32_t img_size);
-    int rtm_preprocess(const cv::Mat &img_mat, int model_input_w,
-                       int model_input_h, cv::Mat &resize_img,
-                       ResizedPaddingInfo &resize_padding_info);
+    int32_t rtm_preprocess(const cv::Mat &img_mat, int32_t model_input_w,
+                           int32_t model_input_h, cv::Mat &resize_img,
+                           ResizedPaddingInfo &resize_padding_info);
 
   public:
-    int detect_face(const RESTYPE res_type, const cv::Mat &img,
-                    ICVFaces &face_target);
+    int32_t detect_face(const RESTYPE res_type, const cv::Mat &img,
+                        ICVFaces &face_target);
 
   public:
-    int set_param(const char *para, const char *value);
-    int get_param(const char *para, char *value, int32_t len);
-    int reset();
+    int32_t set_param(const char *para, const char *value);
+    int32_t get_param(const char *para, char *value, int32_t len);
+    int32_t reset();
 
   protected:
     int32_t preprocess_impl(const RESTYPE res_type, const cv::Mat &input_mat,
