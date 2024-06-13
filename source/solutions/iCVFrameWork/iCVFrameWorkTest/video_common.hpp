@@ -21,7 +21,7 @@ static char g_delimiter = '/';
 static std::string g_delimiter_str = "/";
 #endif
 
-API_LIST_FW(DeclareApi);
+API_LIST_FrameWork(DeclareApi);
 
 static std::map<RESTYPE, const std::string> res_map = {
     {RESTYPE_FACE_DETECT_CPU, "RESTYPE_FACE_DETECT_CPU"},
@@ -77,7 +77,7 @@ std::vector<std::string> read_file_list(std::string file_list) {
     return file_list_vec;
 }
 
-int select_max_face(ICVFaces &face_targets) {
+int select_max_face(ICVFrameWorkFaces &face_targets) {
     int max_index = -1;
     int area = 0;
     if (1 == face_targets.face_num) {
@@ -94,8 +94,8 @@ int select_max_face(ICVFaces &face_targets) {
     return max_index;
 }
 
-void draw_face(cv::Mat &frame, ICVFaces &face_targets) {
-    ICVFace &face_target = face_targets.faces[face_targets.face_num];
+void draw_face(cv::Mat &frame, ICVFrameWorkFaces &face_targets) {
+    ICVFrameWorkFace &face_target = face_targets.faces[face_targets.face_num];
     cv::Rect draw_rect;
     draw_rect.x = face_target.face_rect_with_info.rect.x;
     draw_rect.y = face_target.face_rect_with_info.rect.y;
@@ -114,9 +114,9 @@ void draw_face(cv::Mat &frame, ICVFaces &face_targets) {
                 cv::FONT_HERSHEY_DUPLEX, 0.5, cv::Scalar(0, 255, 0), 2);
 }
 
-void draw_faces(cv::Mat &frame, ICVFaces &face_targets) {
+void draw_faces(cv::Mat &frame, ICVFrameWorkFaces &face_targets) {
     for (int face_index = 0; face_index < face_targets.face_num; face_index++) {
-        ICVFace &face_target = face_targets.faces[face_index];
+        ICVFrameWorkFace &face_target = face_targets.faces[face_index];
         cv::Rect draw_rect;
         draw_rect.x = face_target.face_rect_with_info.rect.x;
         draw_rect.y = face_target.face_rect_with_info.rect.y;
@@ -139,7 +139,7 @@ enum class IFLY_DSM_DMS_TYPE : int {
 };
 
 void draw_rect_and_points(
-    cv::Mat &frame, ICVFaces &face_targets,
+    cv::Mat &frame, ICVFrameWorkFaces &face_targets,
     IFLY_DSM_DMS_TYPE dms_type = IFLY_DSM_DMS_TYPE::IFLY_DSM_DMS_TYPE_FACE) {
     switch (dms_type) {
     case IFLY_DSM_DMS_TYPE::IFLY_DSM_DMS_TYPE_FACE:
@@ -162,7 +162,7 @@ class CombInstBase {
 
   public:
     static int init_engine() {
-        API_LIST_FW(GetProcApiVar);
+        API_LIST_FrameWork(GetProcApiVar);
         int ret = ICVBASE_NO_ERROR;
 
         constexpr int max_len = 128;

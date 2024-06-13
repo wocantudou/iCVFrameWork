@@ -54,7 +54,7 @@ int32_t iCVFaceDetectInst::process(const void *in, void *out) {
 int32_t iCVFaceDetectInst::get_result(void *out) {
     int ret = ICVBASE_NO_ERROR;
     srlog_verify_para(out, ICVBASE_INPUT_ERROR);
-    ICVFaces &face_targets_in = *(ICVFaces *)(out);
+    ICVFrameWorkFaces &face_targets_in = *(ICVFrameWorkFaces *)(out);
     face_targets_in.face_num = 0;
     ret = face_detector_with_engine_->detect_face(res_type_, input_mat_,
                                                   face_targets_in);

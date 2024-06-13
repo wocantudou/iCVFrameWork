@@ -57,7 +57,7 @@ int32_t ICVBASEAPI iCVFrameWorkUninitialize() {
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkCreateInst(iCVFW_INST *inst,
+int32_t ICVBASEAPI iCVFrameWorkCreateInst(iCVFrameWork_INST *inst,
                                           const RESTYPE res_type) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
@@ -81,11 +81,11 @@ int32_t ICVBASEAPI iCVFrameWorkCreateInst(iCVFW_INST *inst,
                        ("G_iCVFrameWorkInstMgr()->create_inst( {}, {} ) error!",
                         static_cast<int>(res_type), inst_id),
                        ret);
-    *inst = reinterpret_cast<iCVFW_INST>(inst_id);
+    *inst = reinterpret_cast<iCVFrameWork_INST>(inst_id);
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkDestroyInst(iCVFW_INST *inst) {
+int32_t ICVBASEAPI iCVFrameWorkDestroyInst(iCVFrameWork_INST *inst) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
@@ -101,7 +101,7 @@ int32_t ICVBASEAPI iCVFrameWorkDestroyInst(iCVFW_INST *inst) {
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkResetInst(iCVFW_INST inst) {
+int32_t ICVBASEAPI iCVFrameWorkResetInst(iCVFrameWork_INST inst) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
@@ -115,7 +115,8 @@ int32_t ICVBASEAPI iCVFrameWorkResetInst(iCVFW_INST inst) {
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkSetParameter(iCVFW_INST inst, const char *param,
+int32_t ICVBASEAPI iCVFrameWorkSetParameter(iCVFrameWork_INST inst,
+                                            const char *param,
                                             const char *value) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
@@ -134,8 +135,9 @@ int32_t ICVBASEAPI iCVFrameWorkSetParameter(iCVFW_INST inst, const char *param,
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkGetParameter(iCVFW_INST inst, const char *param,
-                                            char *value, int32_t len) {
+int32_t ICVBASEAPI iCVFrameWorkGetParameter(iCVFrameWork_INST inst,
+                                            const char *param, char *value,
+                                            int32_t len) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
@@ -154,8 +156,8 @@ int32_t ICVBASEAPI iCVFrameWorkGetParameter(iCVFW_INST inst, const char *param,
     return ret;
 }
 
-int32_t ICVBASEAPI iCVFrameWorkGetResult(iCVFW_INST inst, const void *in_data,
-                                         void *out_data) {
+int32_t ICVBASEAPI iCVFrameWorkGetResult(iCVFrameWork_INST inst,
+                                         const void *in_data, void *out_data) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
     srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);

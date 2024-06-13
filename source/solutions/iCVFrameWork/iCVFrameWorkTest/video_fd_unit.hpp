@@ -68,7 +68,7 @@ int do_facedetect(std::shared_ptr<InstPoolClass<COMB_INST>> &inst_pool,
     std::cout << "#######thread id = " << std::this_thread::get_id()
               << std::endl;
     RESTYPE res_type = RESTYPE_NONE;
-    ICVFaces face_targets;
+    ICVFrameWorkFaces face_targets;
     // face_targets.face_idx = 0;
     // face_targets.face_num = 1;
     // Decode

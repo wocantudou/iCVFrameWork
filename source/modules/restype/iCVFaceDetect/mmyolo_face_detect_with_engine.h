@@ -34,7 +34,7 @@ class MmyoloFaceDetectWithEngine : public iCVBaseEngine {
 
   public:
     int32_t detect_face(const RESTYPE res_type, const cv::Mat &img,
-                        ICVFaces &face_target);
+                        ICVFrameWorkFaces &face_target);
 
   public:
     int32_t set_param(const char *para, const char *value);

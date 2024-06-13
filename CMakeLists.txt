@@ -19,6 +19,7 @@ if(NOT DEFINED CMAKE_RELEASE_POSTFIX)
     set(CMAKE_RELEASE_POSTFIX "")
 endif()
 
+option(BUILD_API_ICVFRAMEWORK "Build iCVFrameWork API." ON)
 option(GIT_SUBMODULE "Check submodules within CMake." ON)
 option(BUILD_WITH_EASY_PROFILER "Build with easy profiler for engine." OFF)
 option(BUILD_WITH_OPENCV "Build with OpenCV." ON)
@@ -89,7 +90,10 @@ endif()
 
 
 # *********************** FOR DEPENDS End ***********************
-
-add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
-add_subdirectory(${source_dir}/modules/restype/iCVFaceDetect)
-add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkTest)
+# API
+if(BUILD_API_ICVFRAMEWORK)
+    add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
+    add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkTest)
+    # ResType and ModType
+    add_subdirectory(${source_dir}/modules/restype/iCVFaceDetect)
+endif()

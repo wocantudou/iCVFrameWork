@@ -151,7 +151,7 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
                                                     void *target_data,
                                                     void *reserved) {
     int32_t ret = ICVBASE_NO_ERROR;
-    ICVFaces &face_targets = *(ICVFaces *)target_data;
+    ICVFrameWorkFaces &face_targets = *(ICVFrameWorkFaces *)target_data;
     int32_t model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
     int32_t model_input_w = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[3];
 
@@ -180,9 +180,10 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
-                                                const cv::Mat &img,
-                                                ICVFaces &face_targets) {
+int32_t
+MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
+                                        const cv::Mat &img,
+                                        ICVFrameWorkFaces &face_targets) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_error_return(
         ((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT)),
@@ -224,7 +225,7 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
                                                      void *reserved) {
     int32_t ret = ICVBASE_NO_ERROR;
 
-    ICVFaces &face_targets = *(ICVFaces *)target_data;
+    ICVFrameWorkFaces &face_targets = *(ICVFrameWorkFaces *)target_data;
 
     float detect_thre = param_inst_.get_iCVFaceDetect_detect_thres();
     int32_t model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
