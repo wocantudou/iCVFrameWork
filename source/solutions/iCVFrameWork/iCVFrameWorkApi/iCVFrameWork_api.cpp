@@ -67,7 +67,16 @@ int32_t ICVBASEAPI iCVFrameWorkCreateInst(iCVFW_INST *inst,
     srlog_verify_para((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT),
                       ICVBASE_INPUT_ERROR);
     long inst_id = -1;
-    ret = G_iCVFrameWorkInstMgr()->create_inst(res_type, inst_id);
+    DNN_WRAPPER::DnnScheduleConfig scfg;
+    scfg.hardware_type_ = static_cast<DNN_WRAPPER::DNNHardWareType>(
+        G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_AIEngineHardWareType());
+    scfg.num_thread_ =
+        G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_AIEngineNumThread();
+    scfg.max_batch_size_ =
+        G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_AIEngineMaxBatchSize();
+    scfg.device_id = G_CFG_ICVFRAMEWORK()->get_iCVFrameWork_AIEngineDeviceID();
+
+    ret = G_iCVFrameWorkInstMgr()->create_inst(res_type, scfg, inst_id);
     srlog_error_return(!ret,
                        ("G_iCVFrameWorkInstMgr()->create_inst( {}, {} ) error!",
                         static_cast<int>(res_type), inst_id),

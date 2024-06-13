@@ -118,7 +118,8 @@ class iCVBaseInstMgr {
         return ret;
     }
 
-    int32_t create_inst(const RESTYPE res_type, long &inst_id) {
+    int32_t create_inst(const RESTYPE res_type,
+                        DNN_WRAPPER::DnnScheduleConfig &scfg, long &inst_id) {
         int32_t ret = ICVBASE_NO_ERROR;
         srlog_perf(LOG_PROF_TAG, "BASE_MGR");
         srlog_verify_init(inited_, ICVBASE_INIT_ERROR);
@@ -139,13 +140,6 @@ class iCVBaseInstMgr {
         inst->res_type_ = res_type;
         ret = inst->init(cfg_path_.c_str());
         srlog_error_return(!ret, ("inst->init( {} ) failed.", cfg_path_), ret);
-        // TODO{
-        DNN_WRAPPER::DnnScheduleConfig scfg;
-        scfg.hardware_type_ = DNN_WRAPPER::DNNHardWareType::DNN_HARDWARE_CPU;
-        scfg.num_thread_ = 1;
-        scfg.max_batch_size_ = 1;
-        scfg.device_id = 0;
-        // TODO}
         if (0 != DnnWrapperInst()->modtype_restypes_map_.count(res_type)) {
             for (const auto &each_res :
                  DnnWrapperInst()->modtype_restypes_map_.at(res_type)) {
