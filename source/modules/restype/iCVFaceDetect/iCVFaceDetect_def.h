@@ -2,7 +2,7 @@
 #define __ICV_FACE_DETECT_DEF_H__
 
 #include "iCVFaceDetect_cfg.h"
-#include "mmyolo_face_detect_with_engine.h"
+#include "iCVFaceDetect_engine.h"
 
 class iCVFaceDetectInst : public iCVBaseDef {
   public:
@@ -16,7 +16,7 @@ class iCVFaceDetectInst : public iCVBaseDef {
     int32_t get_result(void *out);
 
   private:
-    MmyoloFaceDetectWithEngine *face_detector_with_engine_;
+    FaceDetectWithEngine *engine_;
 };
 
 std::unique_ptr<iCVBaseDef> creatorFaceDetectInst();

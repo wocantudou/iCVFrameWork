@@ -1,4 +1,4 @@
-#include "mmyolo_face_detect_with_engine.h"
+#include "iCVFaceDetect_engine.h"
 #include "base_img_proc.h"
 #include "iCVFaceDetect_cfg.h"
 #include "nanodet_decode.hpp"
@@ -28,19 +28,19 @@
 #define OUTPUT_NODE_NAME_THREE ("746")
 
 const std::map<const std::string, const int32_t>
-    MmyoloFaceDetectWithEngine::fd_heads_strides_{{OUTPUT_NODE_NAME_ONE, 8},
-                                                  {OUTPUT_NODE_NAME_TWO, 16},
-                                                  {OUTPUT_NODE_NAME_THREE, 32}};
+    FaceDetectWithEngine::fd_heads_strides_{{OUTPUT_NODE_NAME_ONE, 8},
+                                            {OUTPUT_NODE_NAME_TWO, 16},
+                                            {OUTPUT_NODE_NAME_THREE, 32}};
 
-int32_t MmyoloFaceDetectWithEngine::reset() {
+int32_t FaceDetectWithEngine::reset() {
     int32_t ret = ICVBASE_NO_ERROR;
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
-                                                      int32_t model_input_w,
-                                                      int32_t model_input_h,
-                                                      cv::Mat &resize_mat) {
+int32_t FaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
+                                                int32_t model_input_w,
+                                                int32_t model_input_h,
+                                                cv::Mat &resize_mat) {
     int32_t ret = ICVBASE_NO_ERROR;
     int32_t src_height = img_mat.rows;
     int32_t src_width = img_mat.cols;
@@ -65,9 +65,10 @@ int32_t MmyoloFaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::letterbox(
-    const cv::Mat &src_img, int32_t img_size_w, int32_t img_size_h,
-    cv::Mat &dst_img, ResizedPaddingInfo &resize_padding_info) {
+int32_t
+FaceDetectWithEngine::letterbox(const cv::Mat &src_img, int32_t img_size_w,
+                                int32_t img_size_h, cv::Mat &dst_img,
+                                ResizedPaddingInfo &resize_padding_info) {
     int32_t ret = ICVBASE_NO_ERROR;
     int32_t src_height = src_img.rows;
     int32_t src_width = src_img.cols;
@@ -107,20 +108,18 @@ int32_t MmyoloFaceDetectWithEngine::letterbox(
     return ret;
 }
 
-float MmyoloFaceDetectWithEngine::clip_coord(float cord,
-                                             const int32_t img_size) {
+float FaceDetectWithEngine::clip_coord(float cord, const int32_t img_size) {
     return (std::min)((std::max)(0.f, cord), static_cast<float>(img_size - 1));
 }
 
-int32_t MmyoloFaceDetectWithEngine::rtm_preprocess(
+int32_t FaceDetectWithEngine::rtm_preprocess(
     const cv::Mat &img_mat, int32_t model_input_w, int32_t model_input_h,
     cv::Mat &resize_mat, ResizedPaddingInfo &resize_padding_info) {
     int32_t ret = ICVBASE_NO_ERROR;
     resize_mat.release();
-    srlog_error_return(
-        (!img_mat.empty()),
-        ("MmyoloFaceDetectWithEngine::preprocess | img_mat is empty!"),
-        ICVBASE_INPUT_ERROR);
+    srlog_error_return((!img_mat.empty()),
+                       ("FaceDetectWithEngine::preprocess | img_mat is empty!"),
+                       ICVBASE_INPUT_ERROR);
 
     srlog_error_return(img_mat.cols > 0,
                        ("img_mat.cols = %d <= 0", img_mat.cols),
@@ -146,10 +145,10 @@ int32_t MmyoloFaceDetectWithEngine::rtm_preprocess(
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
-                                                    const cv::Mat &input_mat,
-                                                    void *target_data,
-                                                    void *reserved) {
+int32_t FaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
+                                              const cv::Mat &input_mat,
+                                              void *target_data,
+                                              void *reserved) {
     int32_t ret = ICVBASE_NO_ERROR;
     ICVFrameWorkFaces &face_targets = *(ICVFrameWorkFaces *)target_data;
     int32_t model_input_h = data_io_.inputs_.at(INPUT_NODE_NAME).dims_.d[2];
@@ -180,10 +179,9 @@ int32_t MmyoloFaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
     return ret;
 }
 
-int32_t
-MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
-                                        const cv::Mat &img,
-                                        ICVFrameWorkFaces &face_targets) {
+int32_t FaceDetectWithEngine::detect_face(const RESTYPE res_type,
+                                          const cv::Mat &img,
+                                          ICVFrameWorkFaces &face_targets) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_error_return(
         ((res_type > RESTYPE_NONE) && (res_type < RESTYPE_COUNT)),
@@ -202,27 +200,24 @@ MmyoloFaceDetectWithEngine::detect_face(const RESTYPE res_type,
 
     ret = preprocess(res_type, img, (void *)&face_targets);
     srlog_error_return(
-        (!ret),
-        ("MmyoloFaceDetectWithEngine::detect_face | preprocess inlegal !"),
+        (!ret), ("FaceDetectWithEngine::detect_face | preprocess inlegal !"),
         ret);
 
     ret = forward(res_type);
     srlog_error_return(
-        (!ret), ("MmyoloFaceDetectWithEngine::detect_face | forward inlegal !"),
-        ret);
+        (!ret), ("FaceDetectWithEngine::detect_face | forward inlegal !"), ret);
 
     ret = postprocess(res_type, (void *)&face_targets);
     srlog_error_return(
-        (!ret),
-        ("MmyoloFaceDetectWithEngine::detect_face | postprocess inlegal !"),
+        (!ret), ("FaceDetectWithEngine::detect_face | postprocess inlegal !"),
         ret);
 
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
-                                                     void *target_data,
-                                                     void *reserved) {
+int32_t FaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
+                                               void *target_data,
+                                               void *reserved) {
     int32_t ret = ICVBASE_NO_ERROR;
 
     ICVFrameWorkFaces &face_targets = *(ICVFrameWorkFaces *)target_data;
@@ -334,8 +329,7 @@ int32_t MmyoloFaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::set_param(const char *para,
-                                              const char *value) {
+int32_t FaceDetectWithEngine::set_param(const char *para, const char *value) {
     int32_t ret = ICVBASE_NO_ERROR;
     bool bflag = param_inst_.setConfigValue(para, value);
     if (bflag) {
@@ -355,8 +349,8 @@ int32_t MmyoloFaceDetectWithEngine::set_param(const char *para,
     return ret;
 }
 
-int32_t MmyoloFaceDetectWithEngine::get_param(const char *para, char *value,
-                                              int32_t len) {
+int32_t FaceDetectWithEngine::get_param(const char *para, char *value,
+                                        int32_t len) {
     int32_t ret = ICVBASE_NO_ERROR;
     std::string str_val;
     bool bflag = param_inst_.getConfigValue(para, str_val);

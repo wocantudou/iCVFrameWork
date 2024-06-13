@@ -14,12 +14,10 @@ typedef struct _ResizedPaddingInfo {
     int32_t padding_tblr_[4] = {0};
 } ResizedPaddingInfo;
 
-class MmyoloFaceDetectWithEngine : public iCVBaseEngine {
+class FaceDetectWithEngine : public iCVBaseEngine {
   public:
-    MmyoloFaceDetectWithEngine(const char *workdir) {
-        param_inst_.init(workdir);
-    }
-    ~MmyoloFaceDetectWithEngine() {}
+    FaceDetectWithEngine(const char *workdir) { param_inst_.init(workdir); }
+    ~FaceDetectWithEngine() {}
 
   private:
     int32_t letterbox(const cv::Mat &src_img, int32_t img_size_w,
@@ -50,7 +48,6 @@ class MmyoloFaceDetectWithEngine : public iCVBaseEngine {
 
   private:
     CFG_iCVFaceDetect param_inst_;
-    // static const std::vector<int> fd_heads_strides_;
     static const std::map<const std::string, const int> fd_heads_strides_;
     ResizedPaddingInfo resize_padding_info_;
     cv::Mat ori_img_;
