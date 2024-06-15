@@ -65,9 +65,9 @@ set(CMAKE_USE_PTHREADS_INIT 1)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 set(output_dir  "${PROJECT_SOURCE_DIR}/output")
-message(STATUS "QNX_QUALCOMM PLATFORM")
-set (bin_dir "${output_dir}/bin/qnx700_qualcomm")
-set (lib_dir "${output_dir}/lib/qnx700_qualcomm")
+message(STATUS "AARACH64 QNX700 PLATFORM")
+set (bin_dir "${output_dir}/bin/aarch64_qnx700")
+set (lib_dir "${output_dir}/lib/aarch64_qnx700")
 
 if(NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
 	set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${bin_dir}")
