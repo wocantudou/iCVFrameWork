@@ -81,7 +81,8 @@ FaceDetectWithEngine::letterbox(const cv::Mat &src_img, int32_t img_size_w,
     float dw = img_size_w - new_pad_w;
     float dh = img_size_h - new_pad_h;
     if (new_pad_h != src_height || new_pad_w != src_width) {
-        cv::resize(src_img, dst_img, cv::Size(new_pad_w, new_pad_h));
+        // cv::resize(src_img, dst_img, cv::Size(new_pad_w, new_pad_h));
+        iCVresize(src_img, dst_img, cv::Size(new_pad_w, new_pad_h));
     } else {
         dst_img = src_img.clone();
     }
