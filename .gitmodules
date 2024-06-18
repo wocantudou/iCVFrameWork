@@ -4,3 +4,6 @@
 [submodule "source/submodules/DnnWrapper"]
 	path = source/submodules/DnnWrapper
 	url = https://github.com/wocantudou/DnnWrapper.git
+[submodule "source/submodules/iCVIPLib"]
+	path = source/submodules/iCVIPLib
+	url = https://github.com/wocantudou/iCVIPLib.git

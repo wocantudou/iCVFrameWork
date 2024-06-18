@@ -4,7 +4,6 @@
 #include "iCVBase_def.h"
 #include "iCVFaceDetect_cfg.h"
 #include "iCVFrameWork_types.h"
-#include <opencv2/opencv.hpp>
 
 typedef struct _ResizedPaddingInfo {
     int32_t orginal_img_hw_[2] = {0};

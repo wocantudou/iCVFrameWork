@@ -1,5 +1,6 @@
 #pragma once
-#include "opencv2/opencv.hpp"
+#include "iCVIPLibApi.h"
+// #include "opencv2/opencv.hpp"
 #include <map>
 #ifdef USE_AI_ENGINE_MNN
 #include "mnn/mnn_wrapper.h" //mnn

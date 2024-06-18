@@ -2,15 +2,15 @@ set(source_dir ${PROJECT_SOURCE_DIR}/source)
 
 # opencv 4.9.0
 include_directories(
-    ${source_dir}/submodules/Opencv4.9.0/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/core/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/features2d/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/flann/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/highgui/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/imgproc/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/imgcodecs/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/videoio/include
-    ${source_dir}/submodules/Opencv4.9.0/modules/calib3d/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/core/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/features2d/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/flann/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/highgui/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/imgproc/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/imgcodecs/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/videoio/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/calib3d/include
     )
 
 if(BUILD_WITH_OPENCV)
@@ -19,9 +19,15 @@ if(BUILD_WITH_OPENCV)
                 )
 else()
     include_directories(
-                ${source_dir}/include
+                ${source_dir}/submodules/iCVIPLib/source/include
                 )
 endif()
+
+# iCVIPLib
+include_directories(
+                ${source_dir}/submodules/iCVIPLib/source/iCVIPLibApi
+                ${source_dir}/submodules/iCVIPLib/source/include
+                )
 
 # simpleini and spdlog
 include_directories(
@@ -69,27 +75,8 @@ function(ModuleDependLibs thirdparty_libs)
 
     set(BEGIN_WHOLE_ARCHIVE -Wl,--whole-archive)
     set(END_WHOLE_ARCHIVE -Wl,--no-whole-archive)
-
-    if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug" AND NOT BUILD_WITH_OPENCV)
-        if (MSVC)
-            list(APPEND thirdparty_lib "opencv_imgcodecs409d")
-            list(APPEND thirdparty_lib "opencv_flann409d;opencv_calib3d409d;opencv_imgproc409d;opencv_core409d")
-        else()
-            list(APPEND thirdparty_lib "opencv_imgcodecsd")
-            list(APPEND thirdparty_lib "opencv_flannd;opencv_calib3dd;opencv_imgprocd;opencv_cored")
-        endif()
-        list(APPEND thirdparty_lib "ittnotifyd;libpngd;libtiffd;libjpeg-turbod;libwebpd;zlibd;libopenjp2d")
-    else()
-        if (MSVC)
-            list(APPEND thirdparty_lib "opencv_imgcodecs409")
-            list(APPEND thirdparty_lib "opencv_flann409;opencv_calib3d409;opencv_imgproc409;opencv_core409")
-        else()
-            list(APPEND thirdparty_lib "opencv_imgcodecs")
-            list(APPEND thirdparty_lib "opencv_flann;opencv_calib3d;opencv_imgproc;opencv_core")
-        endif()
-        list(APPEND thirdparty_lib "ittnotify;libpng;libtiff;libjpeg-turbo;libwebp;zlib;libopenjp2")
-    endif()
     
+    list(APPEND thirdparty_lib "iCVIPLib")
     list(APPEND thirdparty_lib "ipedu_static")
     list(APPEND thirdparty_lib "ipup_static")
     list(APPEND thirdparty_lib "decrypt")

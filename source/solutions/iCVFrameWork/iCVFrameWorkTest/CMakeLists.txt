@@ -2,15 +2,15 @@
 
 # opencv 4.9.0
 include_directories(
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/core/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/features2d/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/flann/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/highgui/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/imgproc/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/imgcodecs/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/videoio/include
-    ${PROJECT_SOURCE_DIR}/source/submodules/Opencv4.9.0/modules/calib3d/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/core/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/features2d/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/flann/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/highgui/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/imgproc/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/imgcodecs/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/videoio/include
+    ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/calib3d/include
     )
 
 include_directories(

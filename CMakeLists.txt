@@ -78,15 +78,17 @@ if(BUILD_WITH_EASY_PROFILER)
     add_subdirectory(${source_dir}/submodules/iCVBaseUtilsLib)
 endif()
 
-# OpenCV
-if(BUILD_WITH_OPENCV)
-    set(BUILD_LIST "calib3d" CACHE STRING "" FORCE)
-    list(APPEND BUILD_LIST "videoio")
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-    set(WITH_IPP OFF CACHE BOOL "" FORCE)
-    set(WITH_FFMPEG ${USE_FFMPEG} CACHE BOOL "" FORCE)
-    add_subdirectory(${source_dir}/submodules/Opencv4.9.0)
-endif()
+# # OpenCV
+# if(BUILD_WITH_OPENCV)
+#     set(BUILD_LIST "calib3d" CACHE STRING "" FORCE)
+#     list(APPEND BUILD_LIST "videoio")
+#     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+#     set(WITH_IPP OFF CACHE BOOL "" FORCE)
+#     set(WITH_FFMPEG ${USE_FFMPEG} CACHE BOOL "" FORCE)
+#     add_subdirectory(${source_dir}/submodules/Opencv4.9.0)
+# endif()
+
+add_subdirectory(${source_dir}/submodules/iCVIPLib)
 
 
 # *********************** FOR DEPENDS End ***********************
