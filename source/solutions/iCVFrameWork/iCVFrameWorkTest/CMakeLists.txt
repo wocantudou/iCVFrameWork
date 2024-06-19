@@ -13,11 +13,13 @@ include_directories(
     ${source_dir}/submodules/iCVIPLib/source/submodules/Opencv4.9.0/modules/calib3d/include
     )
 
+
 include_directories(
 ./
 ${PROJECT_SOURCE_DIR}/source/include
 ${PROJECT_SOURCE_DIR}/source/solutions/iCVFrameWork/iCVFrameWorkApi
 ${PROJECT_SOURCE_DIR}/source/submodules/iCVBaseUtilsLib/include/utils
+${PROJECT_SOURCE_DIR}/source/submodules/iCVIPLib/source/include
 )
 
 #*************executable target*********

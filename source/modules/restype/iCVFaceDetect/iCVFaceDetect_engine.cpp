@@ -1,8 +1,5 @@
 #include "iCVFaceDetect_engine.h"
-#include "base_img_proc.h"
 #include "iCVFaceDetect_cfg.h"
-#include "nanodet_decode.hpp"
-#include "nms.hpp"
 #include <algorithm>
 #include <fstream>
 #include <numeric>
@@ -171,14 +168,10 @@ int32_t FaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
     std_data.push_back(static_cast<float>(FD_VAR_G));
     std_data.push_back(static_cast<float>(FD_VAR_B));
 
-    // ret = DNNCVLIB::sub_mean_and_divide_std(
-    //     DNNCVLIB::BGRBGRBGRTOBBBGGGRRR, resize_mat,
-    //     data_io_.inputs_.at(INPUT_NODE_NAME).data_.data(), mean_data.data(),
-    //     std_data.data());
     ret = iCVsub_mean_and_divide_std(
         ICV_SAFE_OPENCV::CHANNEL_SEPARATION_TYPE::BGRBGRBGRTOBBBGGGRRR,
-        resize_mat, data_io_.inputs_.at(INPUT_NODE_NAME).data_.data(),
-        mean_data.data(), std_data.data());
+        resize_mat, mean_data.data(), std_data.data(),
+        data_io_.inputs_.at(INPUT_NODE_NAME).data_.data());
     srlog_error_return((!ret), ("sub_mean_and_divide_std inlegal !"), ret);
 
     return ret;
@@ -233,31 +226,31 @@ int32_t FaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
 
     std::vector<cv::Rect2f> det_rects;
     std::vector<float> scores;
-    std::vector<std::vector<BoxInfo>> decode_results;
+    std::vector<std::vector<iCVNanodetDecodeClass::BoxInfo>> decode_results;
     decode_results.resize(NUM_CLASS);
     for (auto &output : data_io_.outputs_) {
         const std::string output_name = output.first;
         int32_t patch = model_input_h * model_input_w /
                         (fd_heads_strides_.at(output_name) *
                          fd_heads_strides_.at(output_name));
-        std::vector<ClsPred> cls_pred_vec;
-        std::vector<MmyoloDisPred> dis_pred_vec;
+        std::vector<iCVNanodetDecodeClass::ClsPred> cls_pred_vec;
+        std::vector<iCVNanodetDecodeClass::DisPred> dis_pred_vec;
         float *result = output.second.data_.data();
         for (int32_t i = 0; i < patch; ++i) {
-            ClsPred cls_pred;
+            iCVNanodetDecodeClass::ClsPred cls_pred;
             memcpy((void *)cls_pred.cls_preds, (void *)result,
                    NUM_CLASS * sizeof(float));
             cls_pred_vec.push_back(cls_pred);
             result += NUM_CLASS;
-            MmyoloDisPred dis_pred;
+            iCVNanodetDecodeClass::DisPred dis_pred;
             memcpy((void *)dis_pred.dis_preds, (void *)result,
-                   MMYOLO_DIS_PRED_LEN * sizeof(float));
+                   DIS_PRED_LEN * sizeof(float));
             dis_pred_vec.push_back(dis_pred);
-            result += MMYOLO_DIS_PRED_LEN;
+            result += DIS_PRED_LEN;
         }
-        mmyolo_decode_infer(model_input_h, model_input_w, cls_pred_vec,
-                            dis_pred_vec, fd_heads_strides_.at(output_name),
-                            detect_thre, decode_results);
+        iCVdecode_infer(model_input_h, model_input_w, cls_pred_vec,
+                        dis_pred_vec, fd_heads_strides_.at(output_name),
+                        detect_thre, decode_results);
     }
 
     for (auto box_info : decode_results[FACE_LABEL]) {
@@ -277,8 +270,9 @@ int32_t FaceDetectWithEngine::postprocess_impl(const RESTYPE res_type,
     float iou_thres = param_inst_.get_iCVFaceDetect_nms_iou_thres();
     int32_t max_init_nms_cnt =
         param_inst_.get_iCVFaceDetect_max_init_nms_rect_cnt();
-    std::vector<NMSOutData> nms_res;
-    ret = nms2(det_rects, scores, iou_thres, max_init_nms_cnt, nms_res);
+
+    std::vector<iCVNMSClass::NMSOutData> nms_res;
+    ret = iCVnms(det_rects, scores, iou_thres, max_init_nms_cnt, nms_res);
     srlog_error_return((!ret), ("detect_face | nms2 error !"),
                        ICVBASE_ALGORITHM_EXECUTION_ERROR);
 
