@@ -15,8 +15,6 @@ GetEngineNameWithVersion("${PROJECT_SOURCE_DIR}/source/solutions/iCVFrameWork/ve
                          "${PROJECT_SOURCE_DIR}/source/solutions/iCVFrameWork/iCVFrameWorkApi/iCVFrameWork_config.h.in" 
                          "${PROJECT_BINARY_DIR}/iCVFrameWork_config.h")
 
-# set(ENGINE_NAME ${ENGINE_NAME}_shared)
-
 string(CONCAT ENGINE_NAME_WITH_VERSION ${ENGINE_NAME} "_" ${ENGINE_VERSION_MAJOR} "." ${ENGINE_VERSION_MINOR} "." ${ENGINE_VERSION_PATCH})
 message(STATUS "###############ENGINE_NAME_WITH_VERSION = ${ENGINE_NAME_WITH_VERSION}" )
 

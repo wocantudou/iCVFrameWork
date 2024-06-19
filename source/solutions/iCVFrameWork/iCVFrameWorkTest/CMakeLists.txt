@@ -25,7 +25,6 @@ aux_source_directory(.  iCVFrameWorkTest_execute)
 # add thridyparty library
 set(thirdparty_lib_dir "")
 set(thirdparty_lib "")
-# list(APPEND thirdparty_lib "iflyFaceRetrieval_shared")
 if(MSVC)
 	list(APPEND thirdparty_lib_dir "../../thirdparty/opencv/x64/vc15/lib")
 	list(APPEND thirdparty_lib_dir ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
@@ -61,7 +60,6 @@ endif ()
 
 link_directories(
     ${thirdparty_lib_dir}
-    #${user_lib_dir}
 )
 
 #link_libraries(
