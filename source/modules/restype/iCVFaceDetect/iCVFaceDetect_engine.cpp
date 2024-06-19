@@ -171,10 +171,14 @@ int32_t FaceDetectWithEngine::preprocess_impl(const RESTYPE res_type,
     std_data.push_back(static_cast<float>(FD_VAR_G));
     std_data.push_back(static_cast<float>(FD_VAR_B));
 
-    ret = DNNCVLIB::sub_mean_and_divide_std(
-        DNNCVLIB::BGRBGRBGRTOBBBGGGRRR, resize_mat,
-        data_io_.inputs_.at(INPUT_NODE_NAME).data_.data(), mean_data.data(),
-        std_data.data());
+    // ret = DNNCVLIB::sub_mean_and_divide_std(
+    //     DNNCVLIB::BGRBGRBGRTOBBBGGGRRR, resize_mat,
+    //     data_io_.inputs_.at(INPUT_NODE_NAME).data_.data(), mean_data.data(),
+    //     std_data.data());
+    ret = iCVsub_mean_and_divide_std(
+        ICV_SAFE_OPENCV::CHANNEL_SEPARATION_TYPE::BGRBGRBGRTOBBBGGGRRR,
+        resize_mat, data_io_.inputs_.at(INPUT_NODE_NAME).data_.data(),
+        mean_data.data(), std_data.data());
     srlog_error_return((!ret), ("sub_mean_and_divide_std inlegal !"), ret);
 
     return ret;
