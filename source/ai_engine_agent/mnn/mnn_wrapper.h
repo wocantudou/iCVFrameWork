@@ -50,6 +50,7 @@ class MNNSchedule : public AIEngineSchedule<DNNModelHandle, DNNExecuteHandle> {
         return ret;
     }
     int32_t ai_inst_create_impl(const DNNModelHandle *&model_handle,
+                                const DnnScheduleConfig &scfg,
                                 DNNExecuteHandle *&execute_handle) {
         int32_t ret = ICVBASE_NO_ERROR;
         MNN::ScheduleConfig config;
