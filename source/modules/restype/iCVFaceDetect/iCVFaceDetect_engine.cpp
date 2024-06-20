@@ -46,15 +46,15 @@ int32_t FaceDetectWithEngine::load_image_static(const cv::Mat &img_mat,
     float scale_ratio = float(max_dst_size) / max_src_size;
     if (scale_ratio != 1) {
         if (scale_ratio < 1) {
-            cv::resize(img_mat, resize_mat,
-                       cv::Size(int32_t(scale_ratio * src_width),
-                                int32_t(scale_ratio * src_height)),
-                       0, 0, 3);
+            iCVresize(img_mat, resize_mat,
+                      cv::Size(int32_t(scale_ratio * src_width),
+                               int32_t(scale_ratio * src_height)),
+                      0, 0, 3);
         } else {
-            cv::resize(img_mat, resize_mat,
-                       cv::Size(int32_t(scale_ratio * src_width),
-                                int32_t(scale_ratio * src_height)),
-                       0, 0, 1);
+            iCVresize(img_mat, resize_mat,
+                      cv::Size(int32_t(scale_ratio * src_width),
+                               int32_t(scale_ratio * src_height)),
+                      0, 0, 1);
         }
     } else {
         resize_mat = img_mat.clone();
@@ -78,7 +78,6 @@ FaceDetectWithEngine::letterbox(const cv::Mat &src_img, int32_t img_size_w,
     float dw = img_size_w - new_pad_w;
     float dh = img_size_h - new_pad_h;
     if (new_pad_h != src_height || new_pad_w != src_width) {
-        // cv::resize(src_img, dst_img, cv::Size(new_pad_w, new_pad_h));
         iCVresize(src_img, dst_img, cv::Size(new_pad_w, new_pad_h));
     } else {
         dst_img = src_img.clone();
