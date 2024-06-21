@@ -54,8 +54,20 @@ class MNNSchedule : public AIEngineSchedule<DNNModelHandle, DNNExecuteHandle> {
                                 DNNExecuteHandle *&execute_handle) {
         int32_t ret = ICVBASE_NO_ERROR;
         MNN::ScheduleConfig config;
-        config.numThread = 1;
-        config.backupType = MNN_FORWARD_CPU;
+        config.numThread = scfg.num_thread_;
+        switch (scfg.hardware_type_) {
+        case DNN_HARDWARE_CPU:
+            config.backupType = MNN_FORWARD_CPU;
+            break;
+        case DNN_HARDWARE_NPU:
+            config.backupType = MNN_FORWARD_NN;
+            break;
+        default:
+            srlog_error_return(false,
+                               ("{} : HardWare Not Support!",
+                                static_cast<int>(scfg.hardware_type_)),
+                               ICVBASE_SUPPORT_ERROR);
+        }
         MNN::BackendConfig backendConfig;
         backendConfig.memory =
             MNN::BackendConfig::MemoryMode::Memory_Normal; // 内存
@@ -73,7 +85,7 @@ class MNNSchedule : public AIEngineSchedule<DNNModelHandle, DNNExecuteHandle> {
         if (execute_handle) {
             bool flag =
                 model_handle->net_->releaseSession(execute_handle->session_);
-            srlog_error_return(!ret, ("releaseSession() error!"),
+            srlog_error_return(flag, ("releaseSession() error!"),
                                ICVBASE_INSTANCE_ERROR);
             delete execute_handle;
             execute_handle = NULL;
