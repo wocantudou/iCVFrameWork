@@ -31,7 +31,8 @@ link_directories(
 
 set(PYTHON_API_NAME iCVFrameWorkPY)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-add_library(${PYTHON_API_NAME} MODULE ${iCVFrameWork_PYTHON_API_SHARED})
+# add_library(${PYTHON_API_NAME} MODULE ${iCVFrameWork_PYTHON_API_SHARED})
+pybind11_add_module(${PYTHON_API_NAME} ${iCVFrameWork_PYTHON_API_SHARED})
 target_link_libraries(${PYTHON_API_NAME} PRIVATE pybind11::module ${thirdparty_lib})
 set_target_properties(${PYTHON_API_NAME} PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}"
                                                     SUFFIX "${PYTHON_MODULE_SEXTENSION}")
