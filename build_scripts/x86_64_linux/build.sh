@@ -34,8 +34,7 @@ cd ${build_dir}
 
 rm -rf *
 
-cmake	-DBUILD_BASE_UTILS_LIB_TEST=${build_base_utils_lib_test}							\
-		-DBUILD_WITH_EASY_PROFILER=${build_with_easy_profiler}								\
+cmake	-DBUILD_WITH_EASY_PROFILER=${build_with_easy_profiler}								\
 		-DCMAKE_GENERATOR="Unix Makefiles"													\
 		-DCMAKE_TOOLCHAIN_FILE=${project_root_path}/cmake/x86_64_linux.toolchain.cmake		\
 		-DCMAKE_BUILD_TYPE=${build_type}													\

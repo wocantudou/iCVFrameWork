@@ -86,12 +86,12 @@ add_subdirectory(${source_dir}/submodules/iCVIPLib)
 # *********************** FOR DEPENDS End ***********************
 # API
 if(BUILD_API_ICVFRAMEWORK)
+    add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)    
     if(BUILD_PYTHON_API_ICVFRAMEWORK)
         add_subdirectory(${source_dir}/submodules/pybind11-2.13.1)
         add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkPythonApi)
     endif()
-    add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
-    add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkTest)
     # ResType and ModType
     add_subdirectory(${source_dir}/modules/restype/iCVFaceDetect)
+    add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkTest)
 endif()

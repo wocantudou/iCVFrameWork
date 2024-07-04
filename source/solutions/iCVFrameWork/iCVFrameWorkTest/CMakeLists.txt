@@ -67,7 +67,7 @@ link_directories(
 #link_libraries(
 #    ${thirdparty_lib}
 #)
-
+message(STATUS "111111111111111thirdparty_lib = ${thirdparty_lib}")
 set(EXE_TARGET_NAME iCVFrameWorkTest)
 if(MSVC)
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON) #open directory
