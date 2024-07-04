@@ -20,6 +20,7 @@ if(NOT DEFINED CMAKE_RELEASE_POSTFIX)
 endif()
 
 option(BUILD_API_ICVFRAMEWORK "Build iCVFrameWork API." ON)
+option(BUILD_PYTHON_API_ICVFRAMEWORK "Build iCVFrameWork python API." ON)
 option(GIT_SUBMODULE "Check submodules within CMake." ON)
 option(BUILD_WITH_EASY_PROFILER "Build with easy profiler for engine." OFF)
 option(BUILD_WITH_OPENCV "Build with OpenCV." ON)
@@ -78,22 +79,17 @@ if(BUILD_WITH_EASY_PROFILER)
     add_subdirectory(${source_dir}/submodules/iCVBaseUtilsLib)
 endif()
 
-# # OpenCV
-# if(BUILD_WITH_OPENCV)
-#     set(BUILD_LIST "calib3d" CACHE STRING "" FORCE)
-#     list(APPEND BUILD_LIST "videoio")
-#     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-#     set(WITH_IPP OFF CACHE BOOL "" FORCE)
-#     set(WITH_FFMPEG ${USE_FFMPEG} CACHE BOOL "" FORCE)
-#     add_subdirectory(${source_dir}/submodules/Opencv4.9.0)
-# endif()
-
+# iCVIPLib
 add_subdirectory(${source_dir}/submodules/iCVIPLib)
 
 
 # *********************** FOR DEPENDS End ***********************
 # API
 if(BUILD_API_ICVFRAMEWORK)
+    if(BUILD_PYTHON_API_ICVFRAMEWORK)
+        add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkPythonApi)
+        add_subdirectory(${source_dir}/submodules/pybind11-2.13.1)
+    endif()
     add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkApi)
     add_subdirectory(${source_dir}/solutions/iCVFrameWork/iCVFrameWorkTest)
     # ResType and ModType

@@ -62,6 +62,11 @@ include_directories(
                 ${source_dir}/ai_engine_agent
                 )
 
+# pybind11
+include_directories(
+                ${source_dir}/submodules/pybind11-2.13.1/include
+                )
+
 include_directories(
                 ${source_dir}/include
                 )

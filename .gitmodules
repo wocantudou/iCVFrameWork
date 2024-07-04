@@ -7,3 +7,6 @@
 [submodule "source/submodules/iCVIPLib"]
 	path = source/submodules/iCVIPLib
 	url = https://github.com/wocantudou/iCVIPLib.git
+[submodule "source/submodules/pybind11-2.13.1"]
+	path = source/submodules/pybind11-2.13.1
+	url = https://github.com/wocantudou/pybind11-2.13.1.git
