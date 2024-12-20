@@ -1,13 +1,15 @@
 #include "iCVBase_errcode.h"
 #include "iCVFrameWork_api.h"
 #include "iCVFrameWork_types.h"
+#include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
 
 PYBIND11_MODULE(iCVFrameWorkPY, m) {
-    // Define RESTYPE enum in Python
+
+    // Bind RESTYPE enum
     py::enum_<RESTYPE>(m, "RESTYPE")
         .value("RESTYPE_NONE", RESTYPE_NONE)
         .value("RESTYPE_FACE_DETECT_CPU", RESTYPE_FACE_DETECT_CPU)
@@ -43,7 +45,6 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
         .value("ICV_BASE_DATA_STAT_COUNT", ICV_BASE_DATA_STAT_COUNT)
         .export_values();
 
-    // Bind structures
     py::class_<ICVBaseRect2f>(m, "ICVBaseRect2f")
         .def(py::init<>())
         .def_readwrite("x", &ICVBaseRect2f::x)
@@ -128,24 +129,26 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
 
     py::class_<ICVFrameWorkFaces>(m, "ICVFrameWorkFaces")
         .def(py::init<>())
-        .def_property(
-            "faces",
-            [](const ICVFrameWorkFaces &self) {
-                return std::vector<ICVFrameWorkFace>(
-                    self.faces, self.faces + self.face_num);
-            },
-            [](ICVFrameWorkFaces &self,
-               const std::vector<ICVFrameWorkFace> &faces) {
-                size_t n = std::min(faces.size(),
-                                    static_cast<size_t>(MAX_DETECT_OBJECT_NUM));
-                for (size_t i = 0; i < n; ++i) {
-                    self.faces[i] = faces[i];
-                }
-                self.face_num = n;
-            })
+        .def_property_readonly("faces",
+                               [](const ICVFrameWorkFaces &self) {
+                                   return std::vector<ICVFrameWorkFace>(
+                                       self.faces, self.faces + self.face_num);
+                               })
         .def_readwrite("face_num", &ICVFrameWorkFaces::face_num);
 
     // Bind functions
+    m.def(
+        "iCVFrameWorkInitialize",
+        [](const char *cfg_path, void *reserved) {
+            return iCVFrameWorkInitialize(cfg_path, reserved);
+        },
+        py::arg("cfg_path"), py::arg("reserved") = nullptr,
+        "Initialize the iCVFrameWork.");
+
+    m.def(
+        "iCVFrameWorkUninitialize", []() { return iCVFrameWorkUninitialize(); },
+        "Uninitialize the iCVFrameWork.");
+
     m.def(
         "iCVFrameWorkCreateInst",
         [](RESTYPE res_type) {
@@ -179,17 +182,12 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
 
     m.def(
         "iCVFrameWorkGetResult",
-        [](iCVFrameWork_INST inst, const py::bytes &in_data,
-           py::bytes &out_data) {
-            std::string in_data_str = in_data;
-            std::string out_data_str(out_data);
-
-            const void *in_data_ptr = in_data_str.data();
-            void *out_data_ptr = &out_data_str[0];
-
+        [](iCVFrameWork_INST inst, const py::array &in_data,
+           py::array &out_data) {
+            const void *in_data_ptr = in_data.data();
+            void *out_data_ptr = out_data.mutable_data();
             int32_t ret =
                 iCVFrameWorkGetResult(inst, in_data_ptr, out_data_ptr);
-            out_data = py::bytes(out_data_str);
             return ret;
         },
         py::arg("inst"), py::arg("in_data"), py::arg("out_data"));
@@ -197,7 +195,8 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
     m.def(
         "iCVFrameWorkResourceAdd",
         [](RESTYPE res_type, const std::string &res_path) {
-            return iCVFrameWorkResourceAdd(res_type, res_path.c_str());
+            const char *path = (res_path == "" ? NULL : res_path.c_str());
+            return iCVFrameWorkResourceAdd(res_type, path);
         },
         py::arg("res_type"), py::arg("res_path"));
 

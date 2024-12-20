@@ -40,10 +40,10 @@ cmake	-DBUILD_WITH_EASY_PROFILER=${build_with_easy_profiler}								\
 		-DCMAKE_BUILD_TYPE=${build_type}													\
 		-DUSE_FFMPEG=${use_ffmpeg}															\
 		${project_root_path}
-make -j2
+make -j4
 
-if [ "${build_type}" == "Debug" ];then
-	exit
-else
-	echo "################################################## Make Build Target #################"
-fi
+# if [ "${build_type}" == "Debug" ];then
+# 	exit
+# else
+# 	echo "################################################## Make Build Target #################"
+# fi
