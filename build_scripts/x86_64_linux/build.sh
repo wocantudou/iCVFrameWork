@@ -7,6 +7,8 @@ build_type=Release
 build_base_utils_lib_test=OFF
 build_with_easy_profiler=OFF
 use_ffmpeg=ON
+build_python_api_icvframework=ON
+
 if [ ${use_ffmpeg} == "ON" ];then
 	# 172.20.191.53
 	# MY_FFMPEG_PATH=/data/wensha2/tool/ffmpeg4.2.9/install/x86_64-intellinux64-ffmpeg4.2.9
@@ -35,6 +37,7 @@ cd ${build_dir}
 rm -rf *
 
 cmake	-DBUILD_WITH_EASY_PROFILER=${build_with_easy_profiler}								\
+		-DBUILD_PYTHON_API_ICVFRAMEWORK=${build_python_api_icvframework}					\
 		-DCMAKE_GENERATOR="Unix Makefiles"													\
 		-DCMAKE_TOOLCHAIN_FILE=${project_root_path}/cmake/x86_64_linux.toolchain.cmake		\
 		-DCMAKE_BUILD_TYPE=${build_type}													\

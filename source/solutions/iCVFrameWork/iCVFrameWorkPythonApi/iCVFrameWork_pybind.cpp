@@ -4,10 +4,22 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <stdexcept>
 
 namespace py = pybind11;
 
+/**
+ * @brief Python binding module for iCVFrameWork
+ *
+ * This module provides Python bindings for the iCVFrameWork C++ API using
+ * pybind11. It exposes the core functionality including:
+ * - Enum types (RESTYPE, ICV_BASE_IMG_FMT, ICV_BASE_DATA_STAT)
+ * - Data structures (ICVBaseRect2f, ICVBasePoint2f, etc.)
+ * - API functions (Initialize, CreateInst, SetParameter, etc.)
+ *
+ */
 PYBIND11_MODULE(iCVFrameWorkPY, m) {
+    m.doc() = "Python bindings for iCVFrameWork computer vision framework";
 
     // Bind RESTYPE enum
     py::enum_<RESTYPE>(m, "RESTYPE")

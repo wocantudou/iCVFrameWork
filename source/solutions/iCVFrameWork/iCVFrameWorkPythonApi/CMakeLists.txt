@@ -40,6 +40,3 @@ else()
 	target_link_libraries(${PYTHON_API_NAME} PRIVATE ${thirdparty_lib})
 	set_property(TARGET ${PYTHON_API_NAME} PROPERTY CXX_STANDARD 11)
 endif()
-
-
-
