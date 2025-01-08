@@ -19,7 +19,35 @@ namespace py = pybind11;
  *
  */
 PYBIND11_MODULE(iCVFrameWorkPY, m) {
-    m.doc() = "Python bindings for iCVFrameWork computer vision framework";
+    m.doc() = R"pbdoc(
+        Python bindings for iCVFrameWork computer vision framework
+
+        This module provides Python interface to iCVFrameWork, a high-performance
+        computer vision framework. It supports:
+        - Face detection and tracking
+        - Face alignment
+        - Image processing
+        - Multi-modal data processing (image, audio, text)
+
+        Example usage:
+            import iCVFrameWorkPY as icv
+
+            # Initialize framework
+            icv.iCVFrameWorkInitialize("config.json")
+
+            # Create face detection instance
+            ret, inst = icv.iCVFrameWorkCreateInst(icv.RESTYPE_FACE_DETECT_CPU)
+
+            # Process image
+            import numpy as np
+            img = np.random.rand(480, 640, 3).astype(np.uint8)
+            result = np.zeros((100,), dtype=np.float32)
+            ret = icv.iCVFrameWorkGetResult(inst, img, result)
+
+            # Clean up
+            icv.iCVFrameWorkDestroyInst(inst)
+            icv.iCVFrameWorkUninitialize()
+    )pbdoc";
 
     // Bind RESTYPE enum
     py::enum_<RESTYPE>(m, "RESTYPE")
@@ -151,11 +179,27 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
     // Bind functions
     m.def(
         "iCVFrameWorkInitialize",
-        [](const char *cfg_path, void *reserved) {
-            return iCVFrameWorkInitialize(cfg_path, reserved);
+        [](const std::string &cfg_path, void *reserved) {
+            if (cfg_path.empty()) {
+                throw std::invalid_argument("Config path cannot be empty");
+            }
+            return iCVFrameWorkInitialize(cfg_path.c_str(), reserved);
         },
         py::arg("cfg_path"), py::arg("reserved") = nullptr,
-        "Initialize the iCVFrameWork.");
+        R"pbdoc(
+            Initialize the iCVFrameWork framework.
+
+            Args:
+                cfg_path (str): Path to configuration file
+                reserved: Reserved for future use, can be None
+
+            Returns:
+                int: Error code (0 for success)
+
+            Raises:
+                ValueError: If config path is empty
+                RuntimeError: If initialization fails
+        )pbdoc");
 
     m.def(
         "iCVFrameWorkUninitialize", []() { return iCVFrameWorkUninitialize(); },
@@ -164,11 +208,30 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
     m.def(
         "iCVFrameWorkCreateInst",
         [](RESTYPE res_type) {
+            if (res_type < RESTYPE_NONE || res_type >= RESTYPE_COUNT) {
+                throw std::invalid_argument("Invalid resource type");
+            }
             iCVFrameWork_INST inst = nullptr;
             int32_t ret = iCVFrameWorkCreateInst(&inst, res_type);
+            if (ret != 0) {
+                throw std::runtime_error("Failed to create instance");
+            }
             return std::make_pair(ret, inst);
         },
-        py::arg("res_type"));
+        py::arg("res_type"),
+        R"pbdoc(
+            Create a new instance of specified resource type.
+
+            Args:
+                res_type (RESTYPE): Resource type to create
+
+            Returns:
+                tuple: (error_code, instance_handle)
+
+            Raises:
+                ValueError: If resource type is invalid
+                RuntimeError: If instance creation fails
+        )pbdoc");
 
     m.def("iCVFrameWorkDestroyInst", &iCVFrameWorkDestroyInst, py::arg("inst"));
 
