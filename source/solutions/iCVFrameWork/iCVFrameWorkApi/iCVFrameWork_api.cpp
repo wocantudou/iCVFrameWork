@@ -28,7 +28,7 @@ int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
     std::string engine_version =
         engine_name + VERSION_TAG + engine_version_majar + "." +
         engine_version_minor + "." + engine_version_patch;
-    std::cout << "Engine Version : " << engine_version << std::endl;
+    // std::cout << "Engine Version : " << engine_version << std::endl;
     srlog_info("Engine Version : {}", engine_version);
     g_iCVFrameWork_engine_version = engine_version;
     g_iCVFrameWork_permission = true; // TODO
@@ -37,7 +37,7 @@ int32_t ICVBASEAPI iCVFrameWorkInitialize(const char *cfg_path,
         !ret, ("G_iCVFrameWorkInstMgr()->init( {} ) error!", cfg_path), ret);
     g_iCVFrameWork_init = true;
     g_iCVFrameWork_init = true;
-    std::cout << "Initialize successful ..." << std::endl;
+    // std::cout << "Initialize successful ..." << std::endl;
     srlog_info("Initialize successful ...");
     return ret;
 }
@@ -49,7 +49,7 @@ int32_t ICVBASEAPI iCVFrameWorkUninitialize() {
     srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
     ret = G_iCVFrameWorkInstMgr()->fini();
     srlog_error_return(!ret, ("G_iCVFrameWorkInstMgr()->fini() error!"), ret);
-    std::cout << "Uninitialize successful ..." << std::endl;
+    // std::cout << "Uninitialize successful ..." << std::endl;
     srlog_info("Uninitialize successful ...");
     srlog_close();
     g_iCVFrameWork_init = false;
@@ -253,9 +253,10 @@ int32_t ICVBASEAPI iCVFrameWorkGetEngineVersion(const char **engine_version) {
 int32_t ICVBASEAPI iCVFrameWorkGetExpiredTime(const char **expired_time) {
     int32_t ret = ICVBASE_NO_ERROR;
     srlog_perf(LOG_PROF_TAG, "API");
-    srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
-    srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
-    std::cerr << "Supported Soon." << std::endl;
+    // srlog_verify_init(g_iCVFrameWork_init, ICVBASE_INIT_ERROR);
+    // srlog_verify_para(g_iCVFrameWork_permission, ICVBASE_PERMISSION_ERROR);
+    // std::cout << "Supported Soon." << std::endl;
     srlog_info("Supported Soon.");
+    *expired_time = "Supported Soon.";
     return ret;
 }

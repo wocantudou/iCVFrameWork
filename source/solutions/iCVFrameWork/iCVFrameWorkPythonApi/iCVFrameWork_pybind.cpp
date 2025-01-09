@@ -233,7 +233,10 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
                 RuntimeError: If instance creation fails
         )pbdoc");
 
-    m.def("iCVFrameWorkDestroyInst", &iCVFrameWorkDestroyInst, py::arg("inst"));
+    m.def(
+        "iCVFrameWorkDestroyInst",
+        [](iCVFrameWork_INST inst) { return iCVFrameWorkDestroyInst(&inst); },
+        py::arg("inst"));
 
     m.def("iCVFrameWorkResetInst", &iCVFrameWorkResetInst, py::arg("inst"));
 
@@ -257,12 +260,10 @@ PYBIND11_MODULE(iCVFrameWorkPY, m) {
 
     m.def(
         "iCVFrameWorkGetResult",
-        [](iCVFrameWork_INST inst, const py::array &in_data,
-           py::array &out_data) {
-            const void *in_data_ptr = in_data.data();
-            void *out_data_ptr = out_data.mutable_data();
-            int32_t ret =
-                iCVFrameWorkGetResult(inst, in_data_ptr, out_data_ptr);
+        [](iCVFrameWork_INST inst, const ICVBaseDataIn &in_data,
+           ICVFrameWorkFaces &out_data) {
+            int32_t ret = iCVFrameWorkGetResult(inst, (void *)&in_data,
+                                                (void *)&out_data);
             return ret;
         },
         py::arg("inst"), py::arg("in_data"), py::arg("out_data"));
